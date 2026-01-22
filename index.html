@@ -1,47 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Skagit River Chinook Salmon Dashboard</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <header>
-        <h1>🐟 Skagit River Chinook Salmon Population Health</h1>
-        <p>Interactive analysis of salmon recovery in Washington's Puget Sound</p>
+      <h1>🐟 Skagit River Chinook Salmon Population Health</h1>
+      <p>Interactive analysis of salmon recovery in Washington's Puget Sound</p>
     </header>
 
     <main>
-        <div id="map"></div>
-        <aside id="dashboard">
-            <section id="status">
-                <h2>Population Status</h2>
-                <div id="status-content">Loading...</div>
-            </section>
-            <section id="chart-container">
-                <h2>20-Year Trend</h2>
-                <canvas id="populationChart"></canvas>
-            </section>
-            <section id="threats">
-                <h2>Key Threats</h2>
-                <ul id="threats-list">
-                    <li>🌡️ Warming water temperatures</li>
-                    <li>🚧 Fish passage barriers (dams, culverts)</li>
-                    <li>🌲 Habitat loss and degradation</li>
-                    <li>🌊 Ocean survival conditions</li>
-                </ul>
-            </section>
-        </aside>
+      <div id="map"></div>
+      <aside id="dashboard">
+        <section id="status">
+          <h2>Population Status</h2>
+          <div id="status-content">Loading...</div>
+        </section>
+        <section id="chart-container">
+          <h2>20-Year Trend</h2>
+          <canvas id="populationChart"></canvas>
+          <section id="chart-container">
+            <h2>Population Trends</h2>
+            <canvas id="populationChart"></canvas>
+          </section>
+
+          <section id="watershed-comparison">
+            <h2>Watershed Comparison</h2>
+            <canvas id="watershedChart" height="300"></canvas>
+          </section>
+        </section>
+        <section id="threats">
+          <h2>Key Threats</h2>
+          <ul id="threats-list">
+            <li>🌡️ Warming water temperatures</li>
+            <li>🚧 Fish passage barriers (dams, culverts)</li>
+            <li>🌲 Habitat loss and degradation</li>
+            <li>🌊 Ocean survival conditions</li>
+          </ul>
+        </section>
+      </aside>
     </main>
 
     <footer>
-        <p>Data: WDFW, NOAA Fisheries, USGS | Built with Leaflet.js & Chart.js</p>
+      <p>Data: WDFW, NOAA Fisheries, USGS | Built with Leaflet.js & Chart.js</p>
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/chart.js@3/dist/chart.min.js"></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

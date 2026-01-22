@@ -1,0 +1,109 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Skagit River",
+        "population_2024": 432,
+        "recovery_target": 5000,
+        "status": "critical"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.15, 48.35]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Stillaguamish River",
+        "population_2024": 180,
+        "recovery_target": 2000,
+        "status": "critical"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.35, 48.20]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Snohomish River",
+        "population_2024": 350,
+        "recovery_target": 4000,
+        "status": "critical"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.20, 48.08]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Cedar-Sammamish River",
+        "population_2024": 95,
+        "recovery_target": 1500,
+        "status": "endangered"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.10, 47.95]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Duwamish River",
+        "population_2024": 42,
+        "recovery_target": 1000,
+        "status": "endangered"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.33, 47.55]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Puyallup-White River",
+        "population_2024": 210,
+        "recovery_target": 2500,
+        "status": "critical"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.35, 47.15]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chambers-Clover Creek",
+        "population_2024": 155,
+        "recovery_target": 1500,
+        "status": "critical"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.50, 47.05]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Deschutes River",
+        "population_2024": 88,
+        "recovery_target": 1000,
+        "status": "endangered"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.55, 46.95]
+      }
+    }
+  ]
+}

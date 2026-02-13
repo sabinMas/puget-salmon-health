@@ -958,10 +958,10 @@ function toggleBarriers() {
    ========================= */
 async function initDashboard() {
   await loadWatershedBoundaries();
-   await loadFishBarriers();
-       await loadTemperatureStations();
-    createTemperatureLegend();
-    startTemperatureRefresh();
+  await loadFishBarriers();
+  await loadTemperatureStations();
+  createTemperatureLegend();
+  startTemperatureRefresh();
   
   try {
     let watershedData = await fetchWDFWData();
@@ -969,9 +969,8 @@ async function initDashboard() {
       watershedData = FALLBACK_WATERSHED_DATA;
     }
 
-    /* Add population points to map */
+    /* Add population points to map and store references */
     watershedData.forEach((ws, idx) => {
-      // Approximate coordinates for watersheds
       const coords = {
         "Skagit River": [48.4, -121.5],
         "Stillaguamish River": [48.2, -121.8],
@@ -984,16 +983,15 @@ async function initDashboard() {
       };
 
       const latlng = coords[ws.watershed] || [48.0, -122.0];
+      const radius = Math.sqrt((ws.population || 1) / Math.PI) * 150;
       
-      // Fixed: Translucent circles with proper scaling
-      const radius = Math.sqrt((ws.population || 1) / Math.PI) * 150; // Adjusted scaling factor
-      
-      L.circle(latlng, {
-        radius: Math.max(radius, 5000), // Minimum radius for visibility
+      // Create circle and store reference for time slider updates
+      const circle = L.circle(latlng, {
+        radius: Math.max(radius, 5000),
         color: "#1e293b",
         weight: 1,
         opacity: 0.5,
-        fillOpacity: 0.4, // Translucent
+        fillOpacity: 0.4,
         fillColor: getPopulationColor(ws.population, ws.recoveryTarget)
       }).addTo(map).bindPopup(`
         <strong>${ws.watershed}</strong><br/>
@@ -1001,6 +999,9 @@ async function initDashboard() {
         Target: ${ws.recoveryTarget.toLocaleString()}<br/>
         Status: ${statusLabel(ws.population, ws.recoveryTarget)}
       `).on('click', () => updateDetailedStatus(ws));
+      
+      // Store circle reference for time slider updates
+      watershedCircles[ws.watershed] = circle;
     });
 
     /* Regional Status */
@@ -1023,7 +1024,7 @@ async function initDashboard() {
     const chartTargets = watershedData.map(ws => ws.recoveryTarget);
     
     const ctx = document.getElementById("watershedChart").getContext("2d");
-    new Chart(ctx, {
+    populationChart = new Chart(ctx, {
       type: "bar",
       data: {
         labels: chartLabels,
@@ -1046,23 +1047,11 @@ async function initDashboard() {
     });
 
     document.getElementById("update-time").textContent = new Date().toLocaleString();
+    
+    // Initialize time slider after map and data are ready
+    initializeTimeSlider();
+    
   } catch (error) {
     console.error("Error initializing dashboard:", error);
   }
 }
-
-function updateDetailedStatus(ws) {
-  const pct = ((ws.population / ws.recoveryTarget) * 100).toFixed(1);
-  document.getElementById("status-content").innerHTML = `
-    <div class="status-card ${statusClass(ws.population, ws.recoveryTarget)}">
-      <p><strong>🌊 ${ws.watershed}</strong></p>
-      <p>Population: ${ws.population.toLocaleString()} (${ws.latestYear})</p>
-      <p>Target: ${ws.recoveryTarget.toLocaleString()}</p>
-      <p>Status: ${statusLabel(ws.population, ws.recoveryTarget)}</p>
-      <p>Progress: ${pct}%</p>
-      <p>Estuary: ${ws.estuary}</p>
-    </div>
-  `;
-}
-
-document.addEventListener("DOMContentLoaded", initDashboard);

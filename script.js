@@ -9,6 +9,33 @@ const WDFW_SPI_API = {
 };
 
 /* =========================
+   WSDOT FISH PASSAGE BARRIERS API
+   Data Source: WSDOT Fish Passage Uncorrected Barriers - Statewide
+   API Documentation: https://data.wsdot.wa.gov/arcgis/rest/services/Shared/FishPassageData/MapServer/8
+   ========================= */
+const WSDOT_BARRIERS_API = "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/FishPassageData/MapServer/8/query";
+
+/* Puget Sound watershed boundaries for filtering barriers */
+const PUGET_SOUND_WATERSHEDS = [
+  "Skagit",
+  "Stillaguamish", 
+  "Snohomish",
+  "Cedar",
+  "Sammamish",
+  "Duwamish",
+  "Green",
+  "Puyallup",
+  "White",
+  "Nisqually",
+  "Skokomish"
+];
+
+/* Layer group for barriers (for toggle control) */
+let barriersLayer;
+let barriersVisible = true;
+
+
+/* =========================
    FALLBACK WATERSHED DATA
    ========================= */
 const FALLBACK_WATERSHED_DATA = [

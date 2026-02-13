@@ -26,6 +26,19 @@
 
   <main>
     <div id="map" aria-label="Watershed map"></div>
+<!-- Time Slider Control -->
+<div id="time-slider-container">
+  <div id="time-display">
+    <span id="current-year">2024</span>
+    <div id="year-change-indicator"></div>
+  </div>
+  
+  <div id="slider-controls">
+    <button id="play-pause-btn" aria-label="Play animation">▶️ Play</button>
+    <input type="range" id="year-slider" min="1990" max="2024" value="2024" step="1" aria-label="Year slider" />
+    <span id="slider-range">1990 - 2024</span>
+  </div>
+</div>
 
     <aside id="dashboard">
       <section id="status">

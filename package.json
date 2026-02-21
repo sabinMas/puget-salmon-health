@@ -1,15 +1,35 @@
 {
-  "type": "module",
-  "dependencies": {
-    "express": "^5.2.1"
-  },
   "name": "puget-salmon-health",
   "version": "1.0.0",
   "description": "An interactive web-based dashboard visualizing the health and status of Chinook salmon populations across Puget Sound watersheds in Washington State. The project combines geospatial analysis, live population data, and environmental monitoring to support salmon recovery decision-making.",
-  "main": "app.js",
-  "devDependencies": {},
+  "type": "module",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev --port 3010",
+    "build": "next build",
+    "start": "next start --port 3010",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.13.0",
+    "leaflet": "^1.9.4",
+    "react-leaflet": "^5.0.0",
+    "next-mdx-remote": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/leaflet": "^1.9.0",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "^15"
   },
   "repository": {
     "type": "git",

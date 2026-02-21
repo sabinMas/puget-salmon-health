@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(cd:*)",
+      "Bash(cd /c/Users/mason/Documents/GitHub/puget-salmon-health && npm install 2>&1)",
+      "Bash(node:*)",
+      "Bash(npm show:*)",
+      "Bash(cd /c/Users/mason/Documents/GitHub/puget-salmon-health && npx next build 2>&1)",
+      "Bash(cd /c/Users/mason/Documents/GitHub/puget-salmon-health && npm run build 2>&1)"
     ]
   }
 }

@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+/* ── Design tokens (PLANNING.md §9) ── */
+:root {
+  --color-primary:   #1b5e5e; /* Deep Teal       */
+  --color-secondary: #b85c38; /* Warm Terracotta  */
+  --color-accent:    #5c7a7a; /* River Stone      */
+  --color-bg:        #faf8f5; /* Off-White        */
+  --color-surface:   #f0ebe3; /* Soft Sand        */
+  --color-text:      #2d2d2d; /* Charcoal         */
+  --color-muted:     #6b7280; /* Slate            */
+  --color-success:   #2d6a4f; /* Forest Green     */
+  --color-warning:   #d4a017; /* Amber            */
+  --color-danger:    #9b2226; /* Deep Red         */
+}
+
+/* ── Tailwind v4 theme extension ── */
+@theme {
+  --color-primary:   var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent:    var(--color-accent);
+  --color-bg:        var(--color-bg);
+  --color-surface:   var(--color-surface);
+  --color-text:      var(--color-text);
+  --color-muted:     var(--color-muted);
+  --color-success:   var(--color-success);
+  --color-warning:   var(--color-warning);
+  --color-danger:    var(--color-danger);
+
+  /* Falls back to system fonts until next/font loads --font-sans-loaded */
+  --font-sans: var(--font-sans-loaded, "Source Sans 3", ui-sans-serif, system-ui, sans-serif);
+}
+
+/* ── Base styles ── */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}

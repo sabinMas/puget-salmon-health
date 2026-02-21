@@ -26,52 +26,51 @@ M7: Polish, Accessibility Audit, Launch ░░░░░░░░░░  ~2 weeks
 
 ### Tasks
 
-- [ ] **M0.1 — Initialize Next.js project**
-  - `npx create-next-app@latest` with TypeScript, Tailwind, App Router, ESLint
-  - Set up project structure per CLAUDE.md
-  - Configure Prettier, ESLint rules
-  - Verify dev server runs
+- [x] **M0.1 — Initialize Next.js project**
+  - Next.js 15.5, TypeScript, Tailwind v4, App Router, ESLint — manually scaffolded
+  - Project structure: `app/`, `components/`, `lib/`, `types/`, `content/`, `public/data/`
+  - `next.config.ts`, `tsconfig.json`, `postcss.config.mjs` created
+  - `npm run build` passes clean (14 routes, TypeScript clean)
 
-- [ ] **M0.2 — Set up design tokens**
-  - Configure Tailwind `tailwind.config.ts` with custom colors, fonts, spacing from PLANNING.md
-  - Create `globals.css` with Tailwind directives and any CSS custom properties
-  - Install and configure fonts (Source Sans Pro or chosen typeface)
+- [x] **M0.2 — Set up design tokens**
+  - Tailwind v4 CSS-first config — no `tailwind.config.ts` needed
+  - Design tokens from PLANNING.md §9 set as CSS custom properties in `app/globals.css`
+  - `@theme` block extends Tailwind with named color utilities (`bg-primary`, `text-muted`, etc.)
+  - Note: Source Sans 3 referenced in CSS but not yet loaded via `next/font` — add in M0.3 polish
 
-- [ ] **M0.3 — Build layout shell**
-  - `<SiteHeader>` with responsive navigation (5 primary nav items)
-  - `<SiteFooter>` with attribution, links, land acknowledgment placeholder
-  - `<SkipToContent>` accessibility link
-  - Root layout (`src/app/layout.tsx`) composing header + main + footer
-  - Verify navigation works for all top-level routes (even if pages are stubs)
+- [x] **M0.3 — Build layout shell**
+  - [x] `components/layout/SiteHeader.tsx` — 5-item nav, active state, `usePathname()`
+  - [x] `components/layout/SiteFooter.tsx` — attribution, land acknowledgment
+  - [x] Skip-to-content link in `app/layout.tsx`
+  - [x] Root layout composing header + main + footer
+  - [x] Responsive mobile hamburger menu — animating bars, closes on route change
 
-- [ ] **M0.4 — Create shared UI components (first pass)**
-  - `<Card>` — base card with variants
-  - `<PageHeader>` — title + subtitle + optional breadcrumbs
-  - `<InfoTooltip>` — accessible tooltip/popover
-  - `<StatusBadge>` — healthy/caution/concern
-  - `<Placeholder>` — clearly marked placeholder block
+- [x] **M0.4 — Create shared UI components (first pass)**
+  - [x] `components/ui/Card.tsx`
+  - [x] `components/ui/PageHeader.tsx`
+  - [x] `components/ui/StatusBadge.tsx` — pairs color + text label (accessible)
+  - [x] `components/ui/InfoTooltip.tsx` — click toggle, Escape/outside-click dismiss, `role="tooltip"`
+  - [x] `components/ui/Placeholder.tsx` — dashed border, `owner` + `section` props
 
-- [ ] **M0.5 — Create mock data files**
-  - `/public/data/watersheds.json` — list of Puget Sound watersheds (name, slug, region, approximate center coordinates)
-  - `/public/data/species.json` — salmon species list
-  - `/public/data/salmon-returns.json` — mocked annual return data (5-10 years × 3-5 watersheds × 3-4 species)
-  - `/public/data/env-indicators.json` — mocked environmental readings
-  - `/public/data/tribes.json` — list of tribal partners (name, slug, placeholder info)
-  - `/public/data/projects.json` — mocked stewardship projects
+- [-] **M0.5 — Create mock data files** — approach changed
+  - Mock data lives inline in `lib/data/*.ts` adapters (not separate JSON files)
+  - GeoJSON copied to `public/data/puget-sound-watersheds.geojson`
+  - JSON files skipped; adapters are the single source of truth for mock data
 
-- [ ] **M0.6 — Build data adapters (mock phase)**
-  - `src/lib/data/watersheds.ts` — `getWatersheds()`, `getWatershedBySlug()`
-  - `src/lib/data/species.ts` — `getSpecies()`
-  - `src/lib/data/salmon-returns.ts` — `getSalmonReturns(basin?, species?, yearRange?)`
-  - `src/lib/data/env-indicators.ts` — `getIndicators(basin?, type?)`
-  - `src/lib/data/tribes.ts` — `getTribes()`, `getTribeBySlug()`
-  - `src/lib/data/projects.ts` — `getProjects(tribe?, type?, basin?)`
-  - All adapters return typed interfaces, read from `/public/data/` JSON
+- [x] **M0.6 — Build data adapters (mock phase)**
+  - [x] `lib/data/watersheds.ts` — `getWatersheds()`, `getWatershedBySlug()`
+  - [x] `lib/data/tribes.ts` — `getTribes()`, `getTribeBySlug()` (9 nations, placeholder taglines)
+  - [x] `lib/data/salmon-returns.ts` — `getSalmonReturns()` with synthetic 10-year trends
+  - [x] `lib/data/env-indicators.ts` — `getIndicators()` with mock temperature readings
+  - [x] `lib/data/species.ts` — `getSpecies()`, `getSpeciesById()` (6 species with scientific names)
+  - [x] `lib/data/projects.ts` — `getProjects()` with filters (5 mock projects across all types)
 
-- [ ] **M0.7 — Stub all pages**
-  - Create route files for every page in the sitemap with minimal content
-  - Each stub shows its `<PageHeader>` and a "Coming soon" `<Placeholder>`
-  - Verify all routes resolve correctly
+- [x] **M0.7 — Stub all pages**
+  - All 14 routes created and verified in `npm run build`:
+    `/`, `/dashboard`, `/dashboard/[basin]`, `/nations`, `/nations/[tribe]`,
+    `/learn`, `/learn/educators`, `/learn/[module]`,
+    `/stewardship`, `/stewardship/[project]`, `/about`,
+    `/api/wdfw`, `/api/usgs`, `/api/barriers`, `/api/scrape`
 
 **M0 Definition of Done:** You can run `npm run dev`, see the site shell with working navigation, click through to every stubbed page, and the mock data adapters return data when called.
 

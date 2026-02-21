@@ -1,16 +1,24 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SalmonMetricCard } from '@/components/dashboard/SalmonMetricCard';
 import { WatershedSelector } from '@/components/dashboard/WatershedSelector';
 import { SpeciesFilter } from '@/components/dashboard/SpeciesFilter';
+import { getWatersheds } from '@/lib/data/watersheds';
+import type { Watershed } from '@/lib/data/watersheds';
 
-interface Watershed {
-  id: string;
-  name: string;
-  slug: string;
-}
+// Leaflet uses window — must be dynamically imported with ssr:false
+const WatershedMap = dynamic(
+  () => import('@/components/dashboard/WatershedMap').then((m) => m.WatershedMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full mb-8 bg-gray-100 animate-pulse rounded-lg border border-gray-200" style={{ height: '380px' }} />
+    ),
+  },
+);
 
 interface Species {
   id: string;
@@ -18,41 +26,39 @@ interface Species {
   slug: string;
 }
 
+const SPECIES: Species[] = [
+  { id: '1', commonName: 'Chinook',  slug: 'chinook'  },
+  { id: '2', commonName: 'Coho',     slug: 'coho'     },
+  { id: '3', commonName: 'Chum',     slug: 'chum'     },
+  { id: '4', commonName: 'Pink',     slug: 'pink'     },
+  { id: '5', commonName: 'Sockeye',  slug: 'sockeye'  },
+];
+
 export default function DashboardPage() {
   const [selectedWatershed, setSelectedWatershed] = useState('all');
-  const [selectedSpecies, setSelectedSpecies] = useState('all');
-  const [watersheds, setWatersheds] = useState<Watershed[]>([]);
-  const [species, setSpecies] = useState<Species[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [selectedSpecies, setSelectedSpecies]     = useState('all');
+  const [watersheds, setWatersheds]               = useState<Watershed[]>([]);
+  const [loading, setLoading]                     = useState(true);
 
   useEffect(() => {
-    // Mock data - in production, fetch from API
-    setWatersheds([
-      { id: '1', name: 'Skagit River', slug: 'skagit' },
-      { id: '2', name: 'Snohomish River', slug: 'snohomish' },
-      { id: '3', name: 'Lake Washington/Cedar/Sammamish', slug: 'lake-washington' },
-      { id: '4', name: 'Green/Duwamish River', slug: 'green-duwamish' },
-      { id: '5', name: 'Puyallup/White River', slug: 'puyallup-white' },
-    ]);
-    
-    setSpecies([
-      { id: '1', commonName: 'Chinook', slug: 'chinook' },
-      { id: '2', commonName: 'Coho', slug: 'coho' },
-      { id: '3', commonName: 'Chum', slug: 'chum' },
-      { id: '4', commonName: 'Pink', slug: 'pink' },
-      { id: '5', commonName: 'Sockeye', slug: 'sockeye' },
-    ]);
-    
-    setLoading(false);
+    getWatersheds().then((data) => {
+      setWatersheds(data);
+      setLoading(false);
+    });
   }, []);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-gray-600">Loading dashboard...</div>
+        <div className="text-xl text-gray-600">Loading dashboard…</div>
       </div>
     );
   }
+
+  const selectedWatershedName =
+    selectedWatershed === 'all'
+      ? 'All Puget Sound'
+      : (watersheds.find((w) => w.slug === selectedWatershed)?.name ?? selectedWatershed);
 
   return (
     <div className="min-h-screen py-8 px-4">
@@ -62,7 +68,14 @@ export default function DashboardPage() {
           description="Current conditions and trends across Puget Sound watersheds."
         />
 
-        {/* Filter Bar */}
+        {/* Interactive watershed map — click a polygon to filter */}
+        <WatershedMap
+          watersheds={watersheds}
+          selected={selectedWatershed}
+          onChange={setSelectedWatershed}
+        />
+
+        {/* Filter Bar — stays in sync with map selection; accessible fallback */}
         <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8 sticky top-20 z-10 shadow-sm">
           <div className="grid md:grid-cols-2 gap-6">
             <WatershedSelector
@@ -71,7 +84,7 @@ export default function DashboardPage() {
               onChange={setSelectedWatershed}
             />
             <SpeciesFilter
-              species={species}
+              species={SPECIES}
               selected={selectedSpecies}
               onChange={setSelectedSpecies}
             />
@@ -100,7 +113,7 @@ export default function DashboardPage() {
               value="58.2"
               unit="°F"
               trend="stable"
-              tooltipText="Average stream temperature in suitable range for salmon"
+              tooltipText="Average stream temperature — within suitable range for salmon"
             />
           </div>
         </div>
@@ -110,24 +123,20 @@ export default function DashboardPage() {
           <h2 className="text-2xl font-bold mb-4 text-primary">Salmon Returns Over Time</h2>
           <div className="h-96 flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
             <div className="text-center">
-              <p className="text-gray-600 text-lg mb-2">Chart Component</p>
+              <p className="text-gray-600 text-lg mb-2">Chart coming in M1.2</p>
               <p className="text-gray-500 text-sm">
-                Time series chart showing salmon return trends from 2015-2024
-              </p>
-              <p className="text-gray-500 text-sm mt-2">
-                Watershed: {selectedWatershed === 'all' ? 'All Puget Sound' : selectedWatershed}
+                Watershed: <strong>{selectedWatershedName}</strong>
               </p>
               <p className="text-gray-500 text-sm">
-                Species: {selectedSpecies === 'all' ? 'All Species' : selectedSpecies}
+                Species: <strong>{selectedSpecies === 'all' ? 'All Species' : selectedSpecies}</strong>
               </p>
             </div>
           </div>
           <div className="mt-4 p-4 bg-blue-50 border-l-4 border-primary rounded">
             <p className="text-sm text-gray-700 leading-relaxed">
               <strong>What does this mean?</strong> This chart shows the estimated number of salmon
-              returning to spawn each year. Upward trends indicate improving conditions, while
-              downward trends may signal habitat degradation, climate impacts, or ocean survival
-              challenges.
+              returning to spawn each year. Upward trends indicate improving conditions; downward
+              trends may signal habitat degradation, climate impacts, or ocean survival challenges.
             </p>
           </div>
         </div>
@@ -139,13 +148,13 @@ export default function DashboardPage() {
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-3">Stream Temperature Trends</h3>
               <div className="h-64 flex items-center justify-center bg-gray-50 rounded border-2 border-dashed border-gray-300">
-                <p className="text-gray-500">Temperature chart placeholder</p>
+                <p className="text-gray-500 text-sm">Chart coming in M1.2</p>
               </div>
             </div>
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-3">Streamflow Patterns</h3>
               <div className="h-64 flex items-center justify-center bg-gray-50 rounded border-2 border-dashed border-gray-300">
-                <p className="text-gray-500">Streamflow chart placeholder</p>
+                <p className="text-gray-500 text-sm">Chart coming in M1.2</p>
               </div>
             </div>
           </div>
@@ -157,19 +166,12 @@ export default function DashboardPage() {
             Data Sources & Methods
           </summary>
           <div className="mt-4 space-y-2 text-gray-700">
-            <p>
-              <strong>Salmon Returns:</strong> WDFW Salmonid Population Indicators (SPI) Database
-              (Mock Data)
-            </p>
-            <p>
-              <strong>Water Temperature:</strong> USGS National Water Information System
-            </p>
-            <p>
-              <strong>Streamflow:</strong> USGS NWIS Real-time Data
-            </p>
+            <p><strong>Salmon Returns:</strong> WDFW Salmonid Population Indicators (SPI) Database (Mock Data)</p>
+            <p><strong>Water Temperature:</strong> USGS National Water Information System</p>
+            <p><strong>Streamflow:</strong> USGS NWIS Real-time Data</p>
+            <p><strong>Watershed Boundaries:</strong> USGS Watershed Boundary Dataset</p>
             <p className="text-sm text-gray-600 mt-4">
-              <strong>Note:</strong> This dashboard currently displays mock data for demonstration
-              purposes. Live data integration is planned for Phase 2.
+              <strong>Note:</strong> This dashboard currently displays mock data. Live data integration is planned for Phase 2 (M5).
             </p>
           </div>
         </details>

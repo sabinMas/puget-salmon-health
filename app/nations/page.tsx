@@ -52,7 +52,7 @@ export default async function NationsPage() {
         <div className="bg-gradient-to-r from-primary to-accent text-white rounded-lg p-8 text-center">
           <h3 className="text-2xl font-bold mb-4">Interested in Partnering?</h3>
           <p className="mb-6 text-lg">
-            If your tribal nation would like to be featured on this dashboard, we'd be honored to
+            If your tribal nation would like to be featured on this dashboard, we&apos;d be honored to
             work with you.
           </p>
           <a

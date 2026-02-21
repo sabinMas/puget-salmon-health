@@ -27,7 +27,7 @@ export default function AboutPage() {
               <strong>Our goals:</strong>
             </p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Provide clear, visual answers to "How are the salmon doing?"</li>
+              <li>Provide clear, visual answers to &quot;How are the salmon doing?&quot;</li>
               <li>
                 Center the leadership and knowledge of Puget Sound tribal nations in salmon
                 recovery
@@ -160,7 +160,7 @@ export default function AboutPage() {
               <li>Keyboard navigation for all interactive elements</li>
               <li>Screen reader-friendly chart descriptions and data summaries</li>
               <li>Color contrast ratios meeting AA standards</li>
-              <li>Status indicators that don't rely solely on color (paired with text/icons)</li>
+              <li>Status indicators that don&apos;t rely solely on color (paired with text/icons)</li>
               <li>Skip-to-content links on every page</li>
             </ul>
             <p>

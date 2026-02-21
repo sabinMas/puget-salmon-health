@@ -8,7 +8,7 @@ export default function EducatorsPage() {
     <>
       <PageHeader
         title="Resources for Educators"
-        subtitle="Lesson plans, activity ideas, and standards alignment notes. Coming in M3."
+        description="Lesson plans, activity ideas, and standards alignment notes. Coming in M3."
       />
       <div className="mx-auto max-w-7xl px-4 py-12 text-muted">
         Downloadable resources will live here.

@@ -7,7 +7,9 @@
       "Bash(node:*)",
       "Bash(npm show:*)",
       "Bash(cd /c/Users/mason/Documents/GitHub/puget-salmon-health && npx next build 2>&1)",
-      "Bash(cd /c/Users/mason/Documents/GitHub/puget-salmon-health && npm run build 2>&1)"
+      "Bash(cd /c/Users/mason/Documents/GitHub/puget-salmon-health && npm run build 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\mason\\\\Documents\\\\GitHub\\\\puget-salmon-health\" && npm run lint 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\mason\\\\Documents\\\\GitHub\\\\puget-salmon-health\" && npm run build 2>&1)"
     ]
   }
 }

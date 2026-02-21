@@ -24,7 +24,7 @@ export default function SalmonLifeCyclePage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-primary mb-4">The Journey Begins: Eggs in Gravel</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              A salmon's life starts in the cold, clean gravel of a stream. Female salmon dig nests
+              A salmon&apos;s life starts in the cold, clean gravel of a stream. Female salmon dig nests
               called <strong>redds</strong> in the streambed using their tails. They lay thousands of
               tiny orange eggs, which the male fertilizes. The parents then cover the eggs with
               gravel to protect them from predators and strong currents.
@@ -43,7 +43,7 @@ export default function SalmonLifeCyclePage() {
               After 6-20 weeks (depending on water temperature), the eggs hatch into{' '}
               <strong>alevin</strong> — tiny fish with a large yolk sac attached to their belly. The
               alevin stay hidden in the gravel, living off the nutrients in their yolk sac. They
-              don't need to find food yet; everything they need is attached to them!
+              don&apos;t need to find food yet; everything they need is attached to them!
             </p>
           </section>
 
@@ -73,7 +73,7 @@ export default function SalmonLifeCyclePage() {
               species.
             </p>
             <p className="text-gray-700 leading-relaxed mb-4">
-              When it's time to migrate to the ocean, amazing changes happen. The parr transform into
+              When it&apos;s time to migrate to the ocean, amazing changes happen. The parr transform into
               <strong> smolt</strong> — their bodies become silvery, their scales toughen, and their
               internal chemistry changes to prepare for saltwater. This process is called{' '}
               <strong>smoltification</strong>.
@@ -100,7 +100,7 @@ export default function SalmonLifeCyclePage() {
             <p className="text-gray-700 leading-relaxed mb-4">
               When adult salmon are ready to spawn, they navigate back to the exact stream where they
               were born — sometimes traveling hundreds of miles upstream! Scientists believe salmon use
-              a combination of the sun, Earth's magnetic field, and their sense of smell to find their
+              a combination of the sun, Earth&apos;s magnetic field, and their sense of smell to find their
               way home.
             </p>
             <p className="text-gray-700 leading-relaxed mb-4">
@@ -184,7 +184,7 @@ export default function SalmonLifeCyclePage() {
                 </li>
                 <li>
                   <strong>Obstacle Course:</strong> Create a physical obstacle course representing a
-                  salmon's journey upstream. Discuss what real-world obstacles salmon face (dams,
+                  salmon&apos;s journey upstream. Discuss what real-world obstacles salmon face (dams,
                   culverts, warm water, predators)
                 </li>
                 <li>
@@ -226,7 +226,7 @@ export default function SalmonLifeCyclePage() {
                 🌊 Why Salmon Matter
               </Link>
               <p className="text-sm mt-1">
-                Learn about salmon's ecological, cultural, and economic importance
+                Learn about salmon&apos;s ecological, cultural, and economic importance
               </p>
             </div>
             <div>

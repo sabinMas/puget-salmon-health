@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SalmonMetricCard } from '@/components/dashboard/SalmonMetricCard';
 import { getWatershedBySlug } from '@/lib/data/watersheds';
@@ -27,9 +28,9 @@ export default async function BasinPage(props: BasinPageProps) {
 
         {/* Breadcrumb */}
         <nav className="mb-6 text-sm">
-          <a href="/dashboard" className="text-primary hover:underline">
+          <Link href="/dashboard" className="text-primary hover:underline">
             Dashboard
-          </a>
+          </Link>
           <span className="mx-2 text-gray-500">→</span>
           <span className="text-gray-700">{watershed.name}</span>
         </nav>

@@ -91,6 +91,24 @@ Before stopping:
 
 ## Session Log
 
+### 2026-02-21 (session 4)
+- Built `<WatershedMap>` component (`components/dashboard/WatershedMap.tsx`) using react-leaflet v5
+- Added `status: WatershedStatus` field to `Watershed` interface and all 9 mock watersheds in `lib/data/watersheds.ts`
+- Added `@import "leaflet/dist/leaflet.css"` to `app/globals.css`
+- Wired map into `app/dashboard/page.tsx` via `next/dynamic({ ssr: false })` — map + dropdown stay in sync via shared state
+- Map features: GeoJSON polygon layer from `/public/data/puget-sound-watersheds.geojson`, click-to-select, hover highlight, status colour legend, selected-watershed label, "Show all ×" reset button
+- `npm run lint` ✅ `npm run build` ✅ (all 15 routes)
+
+### 2026-02-21 (session 3)
+- Created `eslint.config.mjs` (ESLint 9 flat config with `next/core-web-vitals` + `next/typescript`)
+- Fixed `app/learn/[module]/page.tsx`: removed invalid `subtitle` field from `Props` interface; added full metadata
+- Fixed all remaining `subtitle=` → `description=` on `PageHeader` in educators and stewardship pages
+- Fixed `SalmonMetricCard.tsx`: removed duplicate inline `InfoTooltip` stub, fixed prop `text` → `content`
+- Fixed unescaped entities (`&apos;`, `&quot;`) across about, salmon-life-cycle, nations, tribe pages
+- Replaced bare `<a>` tags with Next.js `<Link>` in dashboard/[basin], nations/[tribe]
+- Removed unused `PageHeader` import from `nations/[tribe]/page.tsx`
+- `npm run lint` → ✅ zero warnings/errors; `npm run build` → ✅ all 15 routes clean
+
 ### 2026-02-21 (session 2)
 - Milestone 1 "Site Shell Complete" — all checklist items implemented, `npm run build` clean
 - Mobile hamburger nav in `SiteHeader.tsx` — animating bars, auto-closes on route change, `aria-expanded`

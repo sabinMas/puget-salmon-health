@@ -22,31 +22,15 @@ M7: Polish, Accessibility Audit, Launch ░░░░░░░░░░  ~0% (not
 
 
 
-## Task: Fix dynamic Learn module page for Next.js 15
+## Task: Fix dynamic Learn module page for Next.js 15 ✅ COMPLETE
 
-Context:
-- Repo: sabinMas/puget-salmon-health
-- File: app/learn/[module]/page.tsx
-- Next.js 15 build is failing with:
-  - "Type error: Page 'app/learn/[module]/page.tsx' has an invalid 'default' export: Type 'Props' is not valid."
-  - Previously had: params typed incorrectly and PageHeader props mismatch.
-
-Requirements:
-1. Update `app/learn/[module]/page.tsx` to use the correct Next.js 15 dynamic route pattern:
-   - `params` should be typed as `Promise<{ module: string }>` and awaited inside the async component.
-   - Default export must be a valid async React Server Component function using that props type.
-2. Ensure `PageHeader` is imported and used correctly:
-   - Import: `import { PageHeader } from "@/components/ui/PageHeader";`
-   - Props: `PageHeader` should only receive `title` and optional `description`, no `subtitle`.
-3. Set reasonable default metadata for this page (e.g., "Learn | Puget Sound Salmon Health").
-4. Make the component render:
-   - A title derived from the module slug (e.g., "climate-resilience" → "climate resilience").
-   - Placeholder body content “Learning module — coming in M3.” or similar copy I can edit later.
-5. Run `npm run lint` and `npm run build` locally in the Claude environment (or simulate) and ensure there are no type errors caused by this file.
-
-Deliverables:
-- Updated `app/learn/[module]/page.tsx` that compiles cleanly with Next.js 15.
-- Brief comment at the top of the file explaining the dynamic route params pattern being used.
+- Removed invalid `subtitle` prop from `Props` interface in `app/learn/[module]/page.tsx`
+- Created `eslint.config.mjs` (flat config for ESLint 9 + Next.js 15)
+- Fixed all lint errors site-wide: unescaped entities (`&apos;`/`&quot;`), `<a>` → `<Link>`, unused imports
+- Fixed `subtitle` → `description` in educators and stewardship pages
+- Removed duplicate inline `InfoTooltip` stub from `SalmonMetricCard.tsx`; fixed prop `text` → `content`
+- `npm run lint` → ✅ no warnings or errors
+- `npm run build` → ✅ all 15 routes compile cleanly
 
 
 ## M0: Project Setup & Foundation ✅ COMPLETE
@@ -84,8 +68,91 @@ Deliverables:
 - [x] **M1.5 — Assemble Dashboard page (`/dashboard`)**
 - [ ] **M1.6 — Build basin detail page (`/dashboard/[basin]`)**
 - [ ] **M1.7 — Dashboard polish**
+- [x] **M1.8 — Build `<WatershedMap>` component** ✅
+  - See detailed plan below
 
 **M1 Definition of Done:** A visitor can go to `/dashboard`, select a watershed, filter by species, and see charts with mocked data and plain-language explanations. All charts have accessible alternatives.
+
+---
+
+## M1.8 — WatershedMap: Detailed Implementation Plan
+
+> **Goal:** Replace the plain watershed dropdown with a clickable Leaflet map of Puget Sound, where each watershed polygon is selectable. The dropdown remains as an accessible fallback. Map and dropdown stay in sync.
+
+### Why this matters
+The map is the visual centrepiece of the dashboard. It grounds every number in geography and makes "which watershed?" intuitive — especially for users who don't know watershed names by heart.
+
+### What the finished component does
+- Renders an interactive Leaflet map centred on Puget Sound (~47.6°N, 122.3°W, zoom 9)
+- Draws each watershed as a coloured polygon from the GeoJSON file already in `/public/data/puget-sound-watersheds.geojson`
+- **Hover:** polygon highlights + tooltip shows watershed name
+- **Click:** selects that watershed → updates the same state used by the dropdown (they stay in sync)
+- **Colour coding:** polygons coloured by mock salmon health status (green / amber / red) using the same colour scale from PLANNING.md
+- **"All Puget Sound" reset:** clicking the map background or an "All" button deselects
+- **Accessibility:** the existing `<WatershedSelector>` dropdown is kept alongside the map — keyboard users never lose functionality
+
+### Files to create / modify
+
+| Action | File | What changes |
+|--------|------|-------------|
+| **Create** | `components/dashboard/WatershedMap.tsx` | The Leaflet map — `'use client'`, imports `leaflet/dist/leaflet.css`, renders `MapContainer` + `TileLayer` + `GeoJSON` |
+| **Modify** | `app/dashboard/page.tsx` | `next/dynamic` import of `WatershedMap` (ssr: false); add map section between PageHeader and filter bar |
+| **Modify** | `lib/data/watersheds.ts` | Add `status` field (`'healthy' \| 'caution' \| 'concern'`) to mock data for colour coding |
+
+### Technical decisions
+
+**SSR:** Leaflet uses `window`, so the component must be loaded with:
+```ts
+const WatershedMap = dynamic(
+  () => import('@/components/dashboard/WatershedMap'),
+  { ssr: false, loading: () => <div className="h-96 bg-gray-100 animate-pulse rounded-lg" /> }
+);
+```
+
+**Tile layer:** OpenStreetMap (no API key needed for development):
+```
+https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+```
+
+**GeoJSON → watershed slug matching:** The GeoJSON `properties.name` (e.g. `"Skagit River"`) maps to `lib/data/watersheds.ts` `name` field. On polygon click, look up the watershed by name → get its slug → call `onChange(slug)`.
+
+**Colour scale (matches PLANNING.md health scale):**
+```
+healthy  → #22c55e (green)
+caution  → #ca8a04 (amber)
+concern  → #dc2626 (red)
+```
+Mock status assigned per watershed in `lib/data/watersheds.ts` for now; swapped for real data in M5.
+
+**WatershedMap props:**
+```ts
+interface WatershedMapProps {
+  watersheds: Watershed[];   // from lib/data/watersheds.ts (includes status)
+  selected: string;          // slug or 'all'
+  onChange: (slug: string) => void;
+}
+```
+
+**Dashboard layout after M1.8:**
+```
+PageHeader
+├── WatershedMap (full-width, ~350px tall, click to select)
+├── Filter Bar (WatershedSelector dropdown + SpeciesFilter — stays as accessible alt)
+├── At-a-Glance Metric Cards
+├── Primary Chart (placeholder → Recharts in M1.2)
+├── Environmental Indicators
+└── Data Sources
+```
+
+### Acceptance criteria
+- [ ] Map renders on `/dashboard` without SSR errors
+- [ ] Clicking any watershed polygon updates the page filter (same state as dropdown)
+- [ ] Selecting a watershed via dropdown highlights the correct polygon on the map
+- [ ] Polygons are coloured by mock health status
+- [ ] Hovering a polygon shows the watershed name
+- [ ] Clicking map background resets to "All Puget Sound"
+- [ ] Map has `aria-label` and the dropdown is still present for keyboard users
+- [ ] `npm run build` passes clean
 
 ---
 

@@ -23,7 +23,7 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <>
-      <PageHeader title={title} subtitle="Stewardship project — coming in M4." />
+      <PageHeader title={title} description="Stewardship project — coming in M4." />
       <div className="mx-auto max-w-4xl px-4 py-12 text-muted">
         Project story, media, and impact data will live here.
       </div>

@@ -3,9 +3,6 @@
 import Link from 'next/link';
 import { InfoTooltip } from "@/components/ui/InfoTooltip";
 
-// or whatever your tooltip exports actually are
-
-
 interface SalmonMetricCardProps {
   label: string;
   value: string | number;
@@ -13,10 +10,6 @@ interface SalmonMetricCardProps {
   trend?: 'up' | 'down' | 'stable';
   tooltipText?: string;
   href?: string;
-}
-// components/ui/InfoTooltip.tsx
-export function InfoTooltip({ text }: { text: string }) {
-  return <span>{text}</span>;
 }
 
 
@@ -44,7 +37,7 @@ export function SalmonMetricCard({
     <div className="bg-surface border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
     <div className="flex justify-between items-start mb-2">
       <h3 className="text-sm font-medium text-muted">{label}</h3>
-        {tooltipText && <InfoTooltip text={tooltipText} />}
+        {tooltipText && <InfoTooltip content={tooltipText} />}
     </div>
 
 

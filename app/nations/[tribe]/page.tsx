@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { PageHeader } from '@/components/ui/PageHeader';
+import Link from 'next/link';
 import { AttributionBanner } from '@/components/nations/AttributionBanner';
 import { ContentSection } from '@/components/nations/ContentSection';
 import { SalmonMetricCard } from '@/components/dashboard/SalmonMetricCard';
@@ -61,10 +61,10 @@ export default async function TribePage(props: TribePageProps) {
         {/* Linked Data - Mini Dashboard */}
         <section className="mb-8 bg-surface border border-gray-200 rounded-lg p-6">
           <h2 className="text-2xl font-bold text-primary mb-4">
-            Salmon in {tribe.displayName}'s Waters
+            Salmon in {tribe.displayName}&apos;s Waters
           </h2>
           <p className="text-gray-700 mb-6">
-            Key metrics for watersheds within or near {tribe.displayName}'s traditional territory.
+            Key metrics for watersheds within or near {tribe.displayName}&apos;s traditional territory.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <SalmonMetricCard label="Chinook Returns" value="1,234" trend="up" />
@@ -72,12 +72,12 @@ export default async function TribePage(props: TribePageProps) {
             <SalmonMetricCard label="Habitat Quality" value="Good" trend="up" />
           </div>
           <div className="mt-6">
-            <a
+            <Link
               href="/dashboard"
               className="text-primary font-semibold hover:underline"
             >
               View Full Dashboard Data →
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -89,9 +89,9 @@ export default async function TribePage(props: TribePageProps) {
               Project cards for {tribe.displayName}-led restoration and monitoring efforts will
               appear here.
             </p>
-            <a href="/stewardship" className="text-primary font-semibold hover:underline mt-4 inline-block">
+            <Link href="/stewardship" className="text-primary font-semibold hover:underline mt-4 inline-block">
               View All Projects →
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -107,7 +107,7 @@ export default async function TribePage(props: TribePageProps) {
                 rel="noopener noreferrer"
                 className="underline hover:text-gray-200"
               >
-                {tribe.displayName}'s website
+                {tribe.displayName}&apos;s website
               </a>{' '}
               for more information about their programs and initiatives.
             </p>

@@ -23,7 +23,7 @@ export default async function LearnModulePage({ params }: Props) {
 
   return (
     <>
-      <PageHeader title={title} subtitle="Learning module — coming in M3." />
+      <PageHeader title={title} description="Learning module — coming in M3." />
       <div className="mx-auto max-w-3xl px-4 py-12 text-muted">
         MDX content will render here.
       </div>

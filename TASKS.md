@@ -20,6 +20,35 @@ M7: Polish, Accessibility Audit, Launch ░░░░░░░░░░  ~0% (not
 
 ---
 
+
+
+## Task: Fix dynamic Learn module page for Next.js 15
+
+Context:
+- Repo: sabinMas/puget-salmon-health
+- File: app/learn/[module]/page.tsx
+- Next.js 15 build is failing with:
+  - "Type error: Page 'app/learn/[module]/page.tsx' has an invalid 'default' export: Type 'Props' is not valid."
+  - Previously had: params typed incorrectly and PageHeader props mismatch.
+
+Requirements:
+1. Update `app/learn/[module]/page.tsx` to use the correct Next.js 15 dynamic route pattern:
+   - `params` should be typed as `Promise<{ module: string }>` and awaited inside the async component.
+   - Default export must be a valid async React Server Component function using that props type.
+2. Ensure `PageHeader` is imported and used correctly:
+   - Import: `import { PageHeader } from "@/components/ui/PageHeader";`
+   - Props: `PageHeader` should only receive `title` and optional `description`, no `subtitle`.
+3. Set reasonable default metadata for this page (e.g., "Learn | Puget Sound Salmon Health").
+4. Make the component render:
+   - A title derived from the module slug (e.g., "climate-resilience" → "climate resilience").
+   - Placeholder body content “Learning module — coming in M3.” or similar copy I can edit later.
+5. Run `npm run lint` and `npm run build` locally in the Claude environment (or simulate) and ensure there are no type errors caused by this file.
+
+Deliverables:
+- Updated `app/learn/[module]/page.tsx` that compiles cleanly with Next.js 15.
+- Brief comment at the top of the file explaining the dynamic route params pattern being used.
+
+
 ## M0: Project Setup & Foundation ✅ COMPLETE
 
 > **Goal:** Repo is scaffolded, dev environment works, shared components exist, mock data is in place, and the site shell (nav + footer + routing) is functional.

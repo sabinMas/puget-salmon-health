@@ -1,18 +1,15 @@
 interface PlaceholderProps {
-  /** The tribe, organization, or stakeholder responsible for this content */
   owner: string;
-  /** What kind of content belongs here */
   section: string;
 }
 
-export default function Placeholder({ owner, section }: PlaceholderProps) {
+export function Placeholder({ owner, section }: PlaceholderProps) {
   return (
-    <div
-      className="rounded border border-dashed border-warning bg-surface px-4 py-3 text-sm italic text-muted"
-      aria-label={`Placeholder: awaiting content from ${owner}`}
-    >
-      [Awaiting content from{" "}
-      <strong className="font-semibold not-italic">{owner}</strong>: {section}]
+    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 bg-gray-50 text-center">
+      <p className="text-gray-600 mb-2">
+        <strong>Content Pending:</strong> This section will be populated by {owner}.
+      </p>
+      <p className="text-sm text-gray-500">Section: {section}</p>
     </div>
   );
 }

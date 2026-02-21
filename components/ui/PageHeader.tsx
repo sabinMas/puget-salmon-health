@@ -1,17 +1,15 @@
 interface PageHeaderProps {
   title: string;
-  subtitle?: string;
+  description?: string;
 }
 
-export default function PageHeader({ title, subtitle }: PageHeaderProps) {
+export function PageHeader({ title, description }: PageHeaderProps) {
   return (
-    <div className="border-b border-surface bg-surface px-4 py-8">
-      <div className="mx-auto max-w-7xl">
-        <h1 className="text-3xl font-bold text-primary">{title}</h1>
-        {subtitle && (
-          <p className="mt-2 text-base text-muted">{subtitle}</p>
-        )}
-      </div>
+    <div className="mb-8">
+      <h1 className="text-4xl font-bold text-primary mb-4">{title}</h1>
+      {description && (
+        <p className="text-xl text-gray-700 leading-relaxed">{description}</p>
+      )}
     </div>
   );
 }

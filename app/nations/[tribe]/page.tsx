@@ -6,12 +6,13 @@ import { SalmonMetricCard } from '@/components/dashboard/SalmonMetricCard';
 import { getTribeBySlug } from '@/lib/data/tribes';
 
 interface TribePageProps {
-  params: {
+  params: Promise<{
     tribe: string;
-  };
+  }>;
 }
 
-export default async function TribePage({ params }: TribePageProps) {
+export default async function TribePage(props: TribePageProps) {
+  const params = await props.params;
   const tribe = await getTribeBySlug(params.tribe);
 
   if (!tribe) {

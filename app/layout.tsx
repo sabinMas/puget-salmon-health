@@ -10,15 +10,28 @@ const sourceSans = Source_Sans_3({
   variable: "--font-sans-loaded",
 });
 
+const SITE_NAME = "Puget Sound Salmon Health";
+const SITE_DESCRIPTION =
+  "Track salmon populations, stream temperatures, and watershed health across " +
+  "Puget Sound — real data from WDFW and USGS.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://pugetsalmonhealth.org"),
   title: {
-    default: "Puget Sound Salmon Health",
-    template: "%s | Puget Sound Salmon Health",
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "Tracking salmon health across Puget Sound — informed by science and guided " +
-    "by the knowledge of the Native Nations who have stewarded these waters since " +
-    "time immemorial.",
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({

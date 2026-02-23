@@ -7,7 +7,6 @@ export default function SiteFooter() {
         <abbr title="Washington Department of Fish and Wildlife">WDFW</abbr>,{" "}
         <abbr title="United States Geological Survey">USGS</abbr>, and{" "}
         <abbr title="Washington State Department of Transportation">WSDOT</abbr>.
-        Tribal content is authored and governed by partner nations.
       </p>
       <p className="mt-3 italic">
         This site acknowledges that Puget Sound is the ancestral homeland of the

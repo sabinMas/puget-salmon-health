@@ -1,6 +1,19 @@
+import type { Metadata } from 'next';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Card } from '@/components/ui/Card';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Learn',
+  description:
+    'Learn about Pacific salmon — their life cycle, ecological role, treaty rights, and the co-management that protects them across Puget Sound.',
+  openGraph: {
+    title: 'Learn | Puget Sound Salmon Health',
+    description:
+      'Learning modules on salmon biology, treaty rights, and watershed data literacy for students, educators, and curious adults.',
+    url: '/learn',
+  },
+};
 
 export default function LearnPage() {
   const modules = [

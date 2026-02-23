@@ -13,7 +13,8 @@
       "Bash(cd \"C:\\\\Users\\\\mason\\\\Documents\\\\GitHub\\\\puget-salmon-health\" && npm run lint 2>&1 && npm run build 2>&1)",
       "Bash(python:*)",
       "Bash(curl:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(cd /c/Users/mason/Documents/GitHub/puget-salmon-health && ls app/ && npm run build 2>&1)"
     ]
   }
 }

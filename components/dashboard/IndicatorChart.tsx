@@ -125,8 +125,8 @@ export function IndicatorChart({
 
   // ── Shared axis / grid props ──
   const gridProps   = { strokeDasharray: '3 3', stroke: '#e5e7eb', vertical: false };
-  const xAxisProps  = { dataKey: 'year' as const, tick: { fontSize: 12, fill: '#6b7280' }, tickLine: false, axisLine: false };
-  const yAxisProps  = { tickFormatter: formatValue, tick: { fontSize: 12, fill: '#6b7280' }, tickLine: false, axisLine: false, width: 45 };
+  const xAxisProps  = { dataKey: 'year' as const, tick: { fontSize: 11, fill: '#6b7280' }, tickLine: false, axisLine: false };
+  const yAxisProps  = { tickFormatter: formatValue, tick: { fontSize: 11, fill: '#6b7280' }, tickLine: false, axisLine: false, width: 40 };
   const tooltipEl   = (
     <Tooltip<number, string>
       content={(props) => <ChartTooltip {...props} unit={unit} />}
@@ -192,6 +192,34 @@ export function IndicatorChart({
           )}
         </div>
       )}
+
+      {/* Accessible data table — keyboard / screen-reader alternative to the chart */}
+      <details className="mt-3">
+        <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary rounded">
+          View data as table
+        </summary>
+        <div className="mt-2 overflow-x-auto">
+          <table className="text-xs w-full border-collapse">
+            <caption className="sr-only">{title} — tabular data</caption>
+            <thead>
+              <tr>
+                <th scope="col" className="text-left py-1 pr-6 font-semibold text-gray-600 border-b border-gray-200">Year</th>
+                <th scope="col" className="text-right py-1 font-semibold text-gray-600 border-b border-gray-200">
+                  {unit ? `Value (${unit})` : 'Value'}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((d) => (
+                <tr key={d.year} className="border-b border-gray-100">
+                  <td className="py-1 pr-6 text-gray-700">{d.year}</td>
+                  <td className="py-1 text-right text-gray-700">{formatValue(d.value)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
     </figure>
   );
 }

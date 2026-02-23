@@ -1,4 +1,17 @@
+import type { Metadata } from 'next';
 import { PageHeader } from '@/components/ui/PageHeader';
+
+export const metadata: Metadata = {
+  title: 'About',
+  description:
+    'About the Puget Sound Salmon Health Dashboard — our mission, data sources, methodology, and accessibility commitment.',
+  openGraph: {
+    title: 'About | Puget Sound Salmon Health',
+    description:
+      'Learn about our mission, data sources (WDFW, USGS), and commitment to accessible salmon population data for Puget Sound.',
+    url: '/about',
+  },
+};
 
 export default function AboutPage() {
   return (
@@ -6,7 +19,7 @@ export default function AboutPage() {
       <div className="max-w-4xl mx-auto">
         <PageHeader
           title="About This Project"
-          description="Understanding our mission, partnerships, data sources, and commitment to accessibility."
+          description="Understanding our mission, data sources, and commitment to accessibility."
         />
 
         {/* About Section */}
@@ -19,46 +32,20 @@ export default function AboutPage() {
               scientists, and tribal program managers.
             </p>
             <p>
-              This project recognizes two equal sources of knowledge: scientific data from
-              monitoring programs, and the traditional ecological knowledge of the Native Nations
-              who have stewarded these waters and salmon since time immemorial.
+              Salmon recovery in Puget Sound is shaped by both scientific monitoring data and
+              the traditional ecological knowledge of the Native Nations who have stewarded these
+              waters for thousands of years. This dashboard draws on the public data record and
+              aims to present it in context.
             </p>
             <p>
               <strong>Our goals:</strong>
             </p>
             <ul className="list-disc pl-6 space-y-2">
               <li>Provide clear, visual answers to &quot;How are the salmon doing?&quot;</li>
-              <li>
-                Center the leadership and knowledge of Puget Sound tribal nations in salmon
-                recovery
-              </li>
               <li>Make complex environmental data understandable to all audiences</li>
               <li>Support educators teaching about salmon ecology and treaty rights</li>
               <li>Connect data to stewardship actions and recovery projects</li>
             </ul>
-          </div>
-        </section>
-
-        {/* Tribal Partnerships */}
-        <section className="mb-12 bg-surface border-l-4 border-secondary p-6 rounded-r-lg">
-          <h2 className="text-2xl font-bold text-primary mb-4">Tribal Partnerships</h2>
-          <div className="prose max-w-none text-gray-700 leading-relaxed space-y-4">
-            <p>
-              <strong>Content governance:</strong> Tribal nations control all content on their
-              pages. They decide what to share, how to frame it, and can modify or remove content
-              at any time. Content is reviewed and approved by tribal leadership before
-              publication.
-            </p>
-            <p>
-              <strong>Data sovereignty:</strong> Tribal data belongs to tribal nations. We do not
-              display tribal-specific data without explicit permission. Traditional ecological
-              knowledge is shared only at the discretion of each nation.
-            </p>
-            <p>
-              <strong>Partnership process:</strong> We work directly with tribal natural resources
-              departments to develop content, ensure accuracy, and respect cultural protocols. New
-              partnerships are welcome — contact us to learn more.
-            </p>
           </div>
         </section>
 
@@ -69,56 +56,56 @@ export default function AboutPage() {
             <table className="min-w-full bg-white border border-gray-200 rounded-lg">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  <th scope="col" className="px-3 py-2 sm:px-6 sm:py-3 text-left text-sm font-semibold text-gray-700">
                     Data Type
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  <th scope="col" className="px-3 py-2 sm:px-6 sm:py-3 text-left text-sm font-semibold text-gray-700">
                     Source
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  <th scope="col" className="px-3 py-2 sm:px-6 sm:py-3 text-left text-sm font-semibold text-gray-700">
                     Update Frequency
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 <tr>
-                  <td className="px-6 py-4 text-sm text-gray-700">Salmon Returns</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Salmon Returns</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">
                     WDFW Salmonid Population Indicators (SPI) Database
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">Annual</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Annual</td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4 text-sm text-gray-700">Water Temperature</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Water Temperature</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">
                     USGS National Water Information System
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">Real-time (15 min)</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Real-time (15 min)</td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4 text-sm text-gray-700">Streamflow</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">USGS NWIS</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">Real-time (15 min)</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Streamflow</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">USGS NWIS</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Real-time (15 min)</td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4 text-sm text-gray-700">Fish Passage Barriers</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">WSDOT Fish Passage API</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">Quarterly</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Fish Passage Barriers</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">WSDOT Fish Passage API</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Quarterly</td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4 text-sm text-gray-700">Watershed Boundaries</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">USGS Watershed Boundary Dataset</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">Static</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Watershed Boundaries</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">USGS Watershed Boundary Dataset</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Static</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-gray-800">
-              <strong>Current Status:</strong> This prototype displays mock data for demonstration
-              purposes. Live API integration for salmon returns, water quality, and tribal project
-              data is planned for Phase 2 (M5 milestone).
+              <strong>Current Status:</strong> Salmon return data (WDFW SPI) and current stream
+              temperatures (USGS NWIS) are live. Historical temperature and streamflow trend charts
+              use synthetic data pending USGS annual summary integration.
             </p>
           </div>
 
@@ -177,15 +164,6 @@ export default function AboutPage() {
         <section className="bg-gradient-to-r from-primary to-accent text-white rounded-lg p-8">
           <h2 className="text-2xl font-bold mb-4">Contact & Get Involved</h2>
           <div className="space-y-4">
-            <p>
-              <strong>For tribal partnerships:</strong>{' '}
-              <a
-                href="mailto:partnerships@pugetsalmonhealth.org"
-                className="underline hover:text-gray-200"
-              >
-                partnerships@pugetsalmonhealth.org
-              </a>
-            </p>
             <p>
               <strong>For data questions:</strong>{' '}
               <a

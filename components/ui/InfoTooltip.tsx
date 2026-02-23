@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useId } from 'react';
 
 interface InfoTooltipProps {
   content: string;
@@ -9,6 +9,8 @@ interface InfoTooltipProps {
 export function InfoTooltip({ content }: InfoTooltipProps) {
   const [isOpen, setIsOpen] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const uid = useId();
+  const tooltipId = `tooltip-${uid}`.replace(/:/g, '');
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -42,12 +44,14 @@ export function InfoTooltip({ content }: InfoTooltipProps) {
         className="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary rounded-full"
         aria-label="More information"
         aria-expanded={isOpen}
+        aria-describedby={isOpen ? tooltipId : undefined}
       >
         <svg
           className="w-4 h-4"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
           <path
             fillRule="evenodd"
@@ -58,8 +62,9 @@ export function InfoTooltip({ content }: InfoTooltipProps) {
       </button>
       {isOpen && (
         <div
-          className="absolute z-10 w-64 p-3 mt-2 text-sm text-gray-700 bg-white border border-gray-200 rounded-lg shadow-lg right-0"
+          id={tooltipId}
           role="tooltip"
+          className="absolute z-10 w-64 p-3 mt-2 text-sm text-gray-700 bg-white border border-gray-200 rounded-lg shadow-lg right-0"
         >
           {content}
         </div>

@@ -10,11 +10,11 @@
 ```
 M0: Project Setup & Foundation          ██████████  COMPLETE
 M1: Dashboard MVP (mock data)           ██████████  COMPLETE ✅
-M2: Nations Template System             ██████████  COMPLETE ✅
+M2: Nations Template System             ██████████  REMOVED (no real partnerships)
 M3: Learn & Education Hub               ██████████  COMPLETE ✅
 M4: Stewardship & About Pages           ██████████  COMPLETE ✅
-M5: Data Integration (real APIs)        ░░░░░░░░░░  ~0% (not started)
-M6: CMS & Partner Editing Workflow      ░░░░░░░░░░  ~0% (not started)
+M5: Data Integration (real APIs)        ██████████  COMPLETE ✅
+M6: CMS & Partner Editing Workflow      ░░░░░░░░░░  NEEDS REPLAN (Nations removed)
 M7: Polish, Accessibility Audit, Launch ░░░░░░░░░░  ~0% (not started)
 ```
 
@@ -232,10 +232,10 @@ No PostgreSQL needed for M5. Use a **build-time seed JSON** approach:
 - [x] **M5.2b — Write `scripts/fetch-wdfw.mjs` seed script** ✅ (`npm run data:refresh` → writes `lib/data/real/salmon-returns.json`, 391 real records)
 - [x] **M5.2c — Update `getSalmonReturns()` to read real JSON** ✅ (static `require()` import; exports `salmonDataFetchedAt` for M5.6)
 - [x] **M5.3a — Fix USGS `/api/usgs` 400 error; get current temp per watershed** ✅ (removed `stateCd=WA` — can't combine with `bBox`; 49 stations now return real temps)
-- [ ] **M5.3b — Add current-temperature widget to dashboard (separate from historical charts)**
-- [ ] **M5.4 — Verify GeoJSON `properties.name` values match watershed data**
-- [ ] **M5.5 — Remove mock data labels; update source attributions**
-- [ ] **M5.6 — Add data freshness indicators ("Last updated: X") to dashboard**
+- [x] **M5.3b — Add current-temperature widget to dashboard (separate from historical charts)** ✅
+- [x] **M5.4 — Verify GeoJSON `properties.name` values match watershed data** ✅
+- [x] **M5.5 — Remove mock data labels; update source attributions** ✅
+- [x] **M5.6 — Add data freshness indicators ("Last updated: X") to dashboard** ✅
 
 **M5 Definition of Done:** Dashboard shows real salmon return and environmental data for at least 3 watersheds.
 
@@ -261,11 +261,11 @@ No PostgreSQL needed for M5. Use a **build-time seed JSON** approach:
 
 ### Tasks
 
-- [ ] **M7.1 — Full accessibility audit**
+- [x] **M7.1 — Full accessibility audit** ✅
 - [ ] **M7.2 — Performance optimization**
-- [ ] **M7.3 — Responsive design review**
-- [ ] **M7.4 — Content review**
-- [ ] **M7.5 — SEO setup**
+- [x] **M7.3 — Responsive design review** ✅
+- [x] **M7.4 — Content review** ✅
+- [x] **M7.5 — SEO setup** ✅
 - [ ] **M7.6 — Deployment**
 - [ ] **M7.7 — Documentation**
 

@@ -9,8 +9,8 @@ import { SalmonMetricCard } from '@/components/dashboard/SalmonMetricCard';
 import StatusBadge          from '@/components/ui/StatusBadge';
 import { IndicatorChart }   from '@/components/dashboard/IndicatorChart';
 import type { ChartDataPoint } from '@/components/dashboard/IndicatorChart';
-import { getWatershedBySlug } from '@/lib/data/watersheds';
-import { getSalmonReturns }   from '@/lib/data/salmon-returns';
+import { getWatershedBySlug }                     from '@/lib/data/watersheds';
+import { getSalmonReturns, salmonDataFetchedAt }  from '@/lib/data/salmon-returns';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -20,7 +20,7 @@ interface PageProps {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-// Matches the mock species IDs in lib/data/salmon-returns.ts
+// Species IDs correspond to lib/data/salmon-returns.ts
 const SPECIES = [
   { id: '1', name: 'Chinook',   color: '#1b5e5e' },
   { id: '2', name: 'Coho',      color: '#16a34a' },
@@ -48,6 +48,15 @@ const FLOW_DATA: ChartDataPoint[] = [
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+
+function fmtDate(iso: string): string {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString('en-US', {
+      month: 'short', day: 'numeric', year: 'numeric',
+    });
+  } catch { return ''; }
+}
 
 function aggregateByYear(
   returns: Awaited<ReturnType<typeof getSalmonReturns>>,
@@ -133,7 +142,7 @@ export default async function BasinPage({ params }: PageProps) {
         </nav>
 
         {/* Header */}
-        <div className="flex items-start justify-between mb-8 gap-4">
+        <div className="flex flex-wrap items-start justify-between mb-8 gap-4">
           <PageHeader
             title={`${watershed.name} Basin`}
             description={`Salmon health indicators and environmental conditions for the ${watershed.name} watershed in ${watershed.region}. Area: ${watershed.areaSqKm.toLocaleString()} km².`}
@@ -166,7 +175,7 @@ export default async function BasinPage({ params }: PageProps) {
         </div>
 
         {/* Primary chart — Chinook returns */}
-        <div className="bg-white border border-gray-200 rounded-lg p-8 mb-8">
+        <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 mb-8">
           <h2 className="text-2xl font-bold mb-1 text-primary">
             Chinook Returns — {watershed.name}
           </h2>
@@ -179,7 +188,7 @@ export default async function BasinPage({ params }: PageProps) {
             height={320}
             variant="area"
             interpretation="Estimated Chinook salmon returning to spawn each year based on WDFW spawner surveys. Chinook are the primary focus of recovery efforts and the species most important for tribal subsistence and cultural practices."
-            source="WDFW Salmonid Population Indicators (SPI) — Mock Data (Phase 1)"
+            source={`WDFW Salmonid Population Indicators (SPI) — data.wa.gov${salmonDataFetchedAt ? ` · Refreshed ${fmtDate(salmonDataFetchedAt)}` : ''}`}
           />
         </div>
 
@@ -219,7 +228,7 @@ export default async function BasinPage({ params }: PageProps) {
                 height={200}
                 variant="line"
                 interpretation="Temperatures above 18°C cause physiological stress for adult salmon. A warming trend is visible over the monitoring period."
-                source="USGS NWIS — Mock Data (M5)"
+                source="Synthetic historical data — USGS NWIS annual summaries planned"
               />
             </div>
             <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -232,27 +241,27 @@ export default async function BasinPage({ params }: PageProps) {
                 height={200}
                 variant="line"
                 interpretation="Low flow years reduce spawning habitat availability and concentrate contaminants, increasing mortality risk for all life stages."
-                source="USGS NWIS — Mock Data (M5)"
+                source="Synthetic historical data — USGS NWIS annual summaries planned"
               />
             </div>
           </div>
         </div>
 
-        {/* Tribal connections */}
+        {/* Stewardship link */}
         <div className="bg-surface border-l-4 border-secondary rounded-r-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-primary mb-2">Tribal Stewardship</h2>
+          <h2 className="text-xl font-bold text-primary mb-2">Restoration & Stewardship</h2>
           <p className="text-gray-700 text-sm leading-relaxed mb-4">
-            The {watershed.name} watershed falls within the traditional territories of Native Nations
-            who have stewarded these waters and salmon since time immemorial. Tribal nations hold
-            treaty-protected fishing rights and co-manage salmon populations under the Boldt Decision.
+            Habitat restoration, hatchery programs, and monitoring projects are active across the
+            {' '}{watershed.name} watershed. Tribal nations hold treaty-protected fishing rights
+            and co-manage salmon populations under the Boldt Decision.
           </p>
-          <Link href="/nations" className="text-primary font-semibold hover:underline text-sm">
-            Meet the Nations of Puget Sound →
+          <Link href="/stewardship" className="text-primary font-semibold hover:underline text-sm">
+            View Stewardship Projects →
           </Link>
         </div>
 
         {/* Footer nav */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-y-2">
           <Link href="/dashboard" className="text-primary hover:underline text-sm">
             ← Back to Dashboard
           </Link>

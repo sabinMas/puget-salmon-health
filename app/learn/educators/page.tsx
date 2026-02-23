@@ -171,7 +171,8 @@ export default function EducatorsPage() {
                 </div>
                 <Link
                   href={`/learn/${mod.slug}`}
-                  className="shrink-0 self-start text-sm font-semibold text-primary border border-primary px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-colors whitespace-nowrap"
+                  className="shrink-0 self-start text-sm font-semibold text-primary border border-primary px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
+                  aria-label={`Open module: ${mod.title}`}
                 >
                   Open Module →
                 </Link>
@@ -211,7 +212,7 @@ export default function EducatorsPage() {
           <h2 className="text-2xl font-bold text-primary mb-2">Downloadable Resources</h2>
           <p className="text-sm text-gray-500 mb-6">
             Educator guides and worksheets are in development and will be available for download
-            when content is finalized with tribal partners (M6).
+            when content is finalized.
           </p>
           <div className="space-y-3">
             {RESOURCES.map((res) => (
@@ -239,8 +240,7 @@ export default function EducatorsPage() {
           <h2 className="text-xl font-bold mb-2">Bring This Into Your Classroom</h2>
           <p className="text-sm leading-relaxed mb-4 text-gray-200">
             Are you a teacher or curriculum specialist who would like to pilot these materials?
-            We&apos;d love to work with you. Tribal partners are also available to connect with
-            classrooms for virtual presentations — please reach out to discuss.
+            We&apos;d love to work with you — please reach out to discuss.
           </p>
           <a
             href="mailto:education@pugetsalmonhealth.org"

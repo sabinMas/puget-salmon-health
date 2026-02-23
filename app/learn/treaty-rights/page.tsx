@@ -320,11 +320,11 @@ export default function TreatyRightsPage() {
           <h3 className="text-xl font-bold mb-4">Continue Learning</h3>
           <div className="space-y-4">
             <div>
-              <Link href="/nations" className="underline hover:text-gray-200 font-semibold">
-                Meet the Nations of Puget Sound →
+              <Link href="/stewardship" className="underline hover:text-gray-200 font-semibold">
+                Stewardship Projects →
               </Link>
               <p className="text-sm mt-1 text-gray-200">
-                Learn about the tribal nations who are active co-managers of Puget Sound salmon today
+                See habitat restoration, monitoring, and hatchery projects active across Puget Sound
               </p>
             </div>
             <div>

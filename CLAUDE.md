@@ -91,12 +91,69 @@ Before stopping:
 
 ## Session Log
 
+### 2026-02-22 (session 7, continued again x2)
+- **M7.4 — Content review**: Audited every page for stale tribal-partnership claims; fixes: removed "Tribal content is authored and governed by partner nations" from footer; replaced two dead `/nations` links (salmon-life-cycle + treaty-rights "Continue Learning") with `/stewardship`; removed "with tribal partners (M6)" from educators resources subtitle; removed "Tribal partners are also available for classroom presentations" from educators CTA; softened about page "two equal pillars" paragraph to factual framing; deleted orphaned `components/nations/` folder and `lib/data/tribes.ts` (no imports anywhere); treaty-rights factual history content untouched
+- `npm run build` ✅ 15 routes clean
+
+### 2026-02-22 (session 7, continued again)
+- **M5.6** — Added freshness indicators throughout dashboard: imported `salmonDataFetchedAt` in both `/dashboard` and `/dashboard/[basin]`; appended `· Refreshed Feb 21, 2026` to WDFW chart source footnotes; USGS temp tooltip now shows `As of [date, time]` from live station timestamp; Data Sources accordion shows station count + live timestamp inline; added `fmtDate` / `fmtDateTime` helpers to both pages
+- M5 milestone marked **COMPLETE** in TASKS.md; M2 updated to REMOVED; M6 flagged for replan
+- `npm run build` ✅ 15 routes clean
+
+### 2026-02-22 (session 7, continued)
+- **M5.4** — Fixed 3 GeoJSON name mismatches: added `geoJsonName?: string` to `Watershed` interface; set values for Lake Washington/Cedar/Sammamish (`"Cedar-Sammamish River"`), Green/Duwamish (`"Duwamish River"`), and Puyallup/White (`"Puyallup-White River"`); updated `WatershedMap.tsx` lookup to use `w.geoJsonName ?? w.name` — all 6 map polygons now clickable
+- **M5.5** — Swept all "Mock Data" labels: WDFW salmon returns source → `"data.wa.gov"`; temp/flow trend charts → `"Synthetic historical data — USGS NWIS annual summaries planned"`; about page status note updated from yellow warning to blue informational, reflecting live WDFW + USGS status
+- `npm run build` ✅ 15 routes clean
+
+### 2026-02-22 (session 7)
+- **M5.3b** — Wired real USGS temperature data into the dashboard `SalmonMetricCard`: fetches `/api/usgs` client-side, uses per-watershed lat/lon bounding boxes to filter nearby stations, computes median temperature, shows station count; falls back to `—` with error tooltip; updated Data Sources section to reflect live vs synthetic data
+- **Nations removal** — Deleted `app/nations/` (both index and `[tribe]` pages); removed "Nations" from `SiteHeader` nav; rewrote `app/page.tsx` to remove `getTribes()` and `/nations` links, replacing "Meet the Nations" CTAs with "View Projects" → `/stewardship`; replaced the "Knowledge Holders" pillar with a "The Projects" pillar; removed "Tribal Partners" metric card (now "Stewardship Projects"); simplified `app/stewardship/page.tsx` and `app/stewardship/[project]/page.tsx` to remove all `/nations/[slug]` links and `getTribes()` dependency; updated basin detail page to link to `/stewardship` instead of `/nations`
+- `npm run build` ✅ 15 routes clean (down from 16+2 tribe routes)
+
 ### 2026-02-21 (session 5)
 - **M1.2** — Built `<IndicatorChart>` (`components/dashboard/IndicatorChart.tsx`) using Recharts: `AreaChart`/`LineChart`, `ResponsiveContainer`, gradient fill, custom tooltip, accessible `<figcaption>` summary, loading skeleton, empty state; exports `ChartDataPoint` type
 - **M1.6** — Rebuilt basin detail page (`app/dashboard/[basin]/page.tsx`) as a server component: fetches salmon return data server-side, passes to chart components; Chinook area chart, 6-species breakdown grid, env indicator charts, tribal connections block, `generateMetadata`
 - **M1.7** — Dashboard polish: map instruction caption, "Explore [basin] in detail →" link appears when watershed selected, temperature trend direction corrected
 - M1 milestone marked **COMPLETE** in TASKS.md
 - `npm run lint` ✅ `npm run build` ✅ all 15 routes
+
+### 2026-02-22 (session 9)
+- M7.1 — Full accessibility audit + fixes (WCAG 2.1 AA):
+  - app/page.tsx: decorative emoji → `aria-hidden="true"`; H3→H2 for "The Data"/"The Projects"; H4→H3 for "How to Use" items (fixed H1→H3 skip)
+  - app/about/page.tsx: added `scope="col"` to all table `<th>` elements
+  - SpeciesFilter: added `aria-pressed` + `focus:ring-2` to all toggle buttons
+  - ProjectList: added `aria-pressed` + focus rings to filter buttons; `aria-hidden` on status symbols (●/✓); `aria-label` on "Learn More →" links (was ambiguous across cards)
+  - WatershedMap: focus ring on "Show all ×" reset button
+  - InfoTooltip: added `useId()` + `id` on tooltip + `aria-describedby` on button; `aria-hidden` on SVG icon
+  - IndicatorChart: added `<details>` data table as screen-reader/keyboard alternative to every chart
+  - dashboard/page.tsx: added `aria-live="polite"` region for chart loading announcements; map loading skeleton gets `aria-label`
+  - educators/page.tsx: `aria-label` on "Open Module →" links to disambiguate between modules
+  - Confirmed existing passes: skip-to-content in layout.tsx ✓, WatershedSelector label/id ✓, StatusBadge role="img" ✓, breadcrumb aria-label ✓
+- `npm run build` → ✅ 15 routes clean
+
+### 2026-02-22 (session 8)
+- M7.3 — Responsive design review: fixed 6 issues across the site
+  - SiteHeader: hamburger button `p-1` → `p-2 min-h-[44px] min-w-[44px]` (WCAG 44px tap target)
+  - WatershedMap: fixed 380px height → `h-[280px] sm:h-[380px]` (shorter on mobile)
+  - app/page.tsx hero: `text-5xl` → `text-3xl sm:text-5xl` (prevents overflow on small phones)
+  - dashboard/[basin]: `flex-wrap` on header row + footer nav; `p-8` → `p-4 sm:p-8` on chart card
+  - about/page.tsx table: `px-6 py-3/4` → `px-3 py-2/3 sm:px-6 sm:py-3/4` (more room on mobile)
+  - IndicatorChart: axis label font 12→11px, y-axis width 45→40px (less clutter at small widths)
+- `npm run build` → ✅ 15 routes clean
+
+### 2026-02-22 (session 7)
+- Removed all Nations/tribal pages and orphaned code (app/nations/, components/nations/, lib/data/tribes.ts) — no real partnerships exist
+- Removed "Nations" from SiteHeader nav
+- Rewrote app/page.tsx: Nations CTA → "View Projects", Knowledge Holders pillar → "The Projects", Tribal Partners metric → "Stewardship Projects"
+- Updated app/stewardship/page.tsx, stewardship/[project]/page.tsx, dashboard/[basin]/page.tsx to remove /nations links
+- M5.3b: Added live USGS temperature widget to dashboard; WATERSHED_BOUNDS bounding boxes, medianTemp() helper, currentTempInfo useMemo, live station count in metric card label
+- M5.4: Added geoJsonName field to Watershed; fixed 3 polygon mismatches (Cedar-Sammamish, Duwamish, Puyallup-White)
+- M5.5: Updated all source attribution strings (WDFW → data.wa.gov, env charts → "Synthetic historical data")
+- M5.6: Added salmonDataFetchedAt + fmtDate/fmtDateTime freshness labels; M5 COMPLETE
+- Removed "Tribal partnerships" section from about page
+- M7.4: Audited all pages for stale tribal claims; fixed SiteFooter, salmon-life-cycle, treaty-rights, educators, about
+- M7.5: Added `metadataBase` + og/twitter defaults to app/layout.tsx; added metadata exports to app/page.tsx (absolute title), app/learn/page.tsx, app/stewardship/page.tsx, app/about/page.tsx; created app/dashboard/layout.tsx (server wrapper for 'use client' dashboard page)
+- `npm run build` → ✅ 15 routes clean
 
 ### 2026-02-21 (session 6)
 - M3.7 — Built `app/learn/treaty-rights/page.tsx`: full 5-section module (1855 treaties, fish-ins, Boldt Decision, co-management in practice, Culverts Case); key takeaways, educator discussion questions + activities + standards alignment, continue-learning links; `generateMetadata`

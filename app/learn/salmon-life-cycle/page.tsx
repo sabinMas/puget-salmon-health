@@ -245,11 +245,11 @@ export default function SalmonLifeCyclePage() {
               </p>
             </div>
             <div>
-              <Link href="/nations" className="underline hover:text-gray-200">
-                🤝 Meet the Nations
+              <Link href="/stewardship" className="underline hover:text-gray-200">
+                🤝 Stewardship Projects
               </Link>
               <p className="text-sm mt-1">
-                Hear from tribal nations about their relationship with salmon
+                See restoration and monitoring projects working to recover salmon across Puget Sound
               </p>
             </div>
           </div>

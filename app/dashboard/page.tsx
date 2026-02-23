@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { PageHeader }        from '@/components/ui/PageHeader';
 import { SalmonMetricCard }  from '@/components/dashboard/SalmonMetricCard';
@@ -8,9 +8,9 @@ import { WatershedSelector } from '@/components/dashboard/WatershedSelector';
 import { SpeciesFilter }     from '@/components/dashboard/SpeciesFilter';
 import { IndicatorChart }    from '@/components/dashboard/IndicatorChart';
 import type { ChartDataPoint } from '@/components/dashboard/IndicatorChart';
-import { getWatersheds }     from '@/lib/data/watersheds';
-import { getSalmonReturns }  from '@/lib/data/salmon-returns';
-import type { Watershed }    from '@/lib/data/watersheds';
+import { getWatersheds }                        from '@/lib/data/watersheds';
+import { getSalmonReturns, salmonDataFetchedAt } from '@/lib/data/salmon-returns';
+import type { Watershed }                        from '@/lib/data/watersheds';
 
 // ── Leaflet map (window-dependent — ssr:false) ────────────────────────────────
 const WatershedMap = dynamic(
@@ -19,12 +19,63 @@ const WatershedMap = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="w-full mb-8 bg-gray-100 animate-pulse rounded-lg border border-gray-200"
-        style={{ height: '380px' }}
+        className="w-full mb-8 bg-gray-100 animate-pulse rounded-lg border border-gray-200 h-[280px] sm:h-[380px]"
+        aria-label="Loading watershed map…"
       />
     ),
   },
 );
+
+// ── USGS types + watershed bounding boxes ─────────────────────────────────────
+
+interface UsgsStation {
+  siteCode: string;
+  siteName: string;
+  latitude: number;
+  longitude: number;
+  temperature: number;
+  dateTime: string;
+}
+
+// Approximate lat/lon bounding boxes for each watershed slug (used to filter
+// nearby USGS stations when a specific watershed is selected).
+const WATERSHED_BOUNDS: Record<string, { minLat: number; maxLat: number; minLon: number; maxLon: number }> = {
+  'skagit':          { minLat: 48.2, maxLat: 48.9, minLon: -122.2, maxLon: -121.2 },
+  'snohomish':       { minLat: 47.8, maxLat: 48.2, minLon: -122.2, maxLon: -121.7 },
+  'lake-washington': { minLat: 47.4, maxLat: 47.8, minLon: -122.3, maxLon: -121.9 },
+  'green-duwamish':  { minLat: 47.1, maxLat: 47.6, minLon: -122.2, maxLon: -121.8 },
+  'puyallup-white':  { minLat: 46.9, maxLat: 47.3, minLon: -122.4, maxLon: -121.5 },
+  'nisqually':       { minLat: 46.8, maxLat: 47.2, minLon: -123.0, maxLon: -122.0 },
+  'skokomish':       { minLat: 47.3, maxLat: 47.6, minLon: -123.4, maxLon: -123.0 },
+  'stillaguamish':   { minLat: 48.0, maxLat: 48.4, minLon: -122.3, maxLon: -121.7 },
+  'nooksack':        { minLat: 48.5, maxLat: 49.0, minLon: -122.6, maxLon: -122.0 },
+};
+
+function medianTemp(stations: UsgsStation[]): number {
+  const sorted = [...stations].sort((a, b) => a.temperature - b.temperature);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0
+    ? (sorted[mid - 1].temperature + sorted[mid].temperature) / 2
+    : sorted[mid].temperature;
+}
+
+function fmtDate(iso: string): string {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString('en-US', {
+      month: 'short', day: 'numeric', year: 'numeric',
+    });
+  } catch { return ''; }
+}
+
+function fmtDateTime(iso: string): string {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleString('en-US', {
+      month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
+    });
+  } catch { return ''; }
+}
 
 // ── Static data ───────────────────────────────────────────────────────────────
 
@@ -80,12 +131,32 @@ export default function DashboardPage() {
   const [chartLoading, setChartLoading] = useState(true);
   const [pageLoading,  setPageLoading]  = useState(true);
 
+  // USGS live temperature state
+  const [usgsStations,    setUsgsStations]    = useState<UsgsStation[]>([]);
+  const [usgsTempLoading, setUsgsTempLoading] = useState(true);
+  const [usgsTempError,   setUsgsTempError]   = useState(false);
+
   // Load watershed list once
   useEffect(() => {
     getWatersheds().then((data) => {
       setWatersheds(data);
       setPageLoading(false);
     });
+  }, []);
+
+  // Fetch USGS temperature stations once on mount
+  useEffect(() => {
+    fetch('/api/usgs')
+      .then((r) => r.json())
+      .then((data: unknown) => {
+        if (Array.isArray(data)) {
+          setUsgsStations(data as UsgsStation[]);
+        } else {
+          setUsgsTempError(true);
+        }
+      })
+      .catch(() => setUsgsTempError(true))
+      .finally(() => setUsgsTempLoading(false));
   }, []);
 
   // Re-fetch + aggregate salmon return data whenever filters change
@@ -110,6 +181,26 @@ export default function DashboardPage() {
 
     loadChart();
   }, [selectedWatershed, selectedSpecies, watersheds]);
+
+  // Derive current temperature from USGS stations for the selected watershed
+  const currentTempInfo = useMemo(() => {
+    if (usgsStations.length === 0) return null;
+    let relevant = usgsStations;
+    if (selectedWatershed !== 'all') {
+      const bounds = WATERSHED_BOUNDS[selectedWatershed];
+      if (bounds) {
+        const nearby = usgsStations.filter(
+          (s) =>
+            s.latitude  >= bounds.minLat && s.latitude  <= bounds.maxLat &&
+            s.longitude >= bounds.minLon && s.longitude <= bounds.maxLon,
+        );
+        if (nearby.length > 0) relevant = nearby;
+      }
+    }
+    const temp = medianTemp(relevant);
+    const dateTime = relevant[0]?.dateTime ?? '';
+    return { temp, stationCount: relevant.length, dateTime };
+  }, [usgsStations, selectedWatershed]);
 
   if (pageLoading) {
     return (
@@ -216,13 +307,31 @@ export default function DashboardPage() {
               tooltipText="Percentage change in estimated returns compared to 5 years ago."
             />
             <SalmonMetricCard
-              label="Stream Temperature (2024)"
-              value="14.5"
+              label={`Current Stream Temperature${currentTempInfo ? ` (${currentTempInfo.stationCount} station${currentTempInfo.stationCount !== 1 ? 's' : ''})` : ''}`}
+              value={
+                usgsTempLoading ? '…'
+                : usgsTempError  ? '—'
+                : currentTempInfo ? currentTempInfo.temp.toFixed(1)
+                : '—'
+              }
               unit="°C"
-              trend="up"
-              tooltipText="Late-summer stream temperature. Currently within safe range — above 18°C causes physiological stress for salmon. Rising trend is a concern. (Mock data — USGS integration in M5)"
+              trend={
+                currentTempInfo && currentTempInfo.temp > 14 ? 'up'
+                : currentTempInfo && currentTempInfo.temp < 10 ? 'down'
+                : 'stable'
+              }
+              tooltipText={
+                usgsTempError
+                  ? 'Stream temperature data could not be loaded from USGS.'
+                  : `Median stream temperature across ${currentTempInfo?.stationCount ?? '…'} active USGS monitoring stations${selectedWatershed !== 'all' ? ' in this watershed' : ' across Puget Sound'}. Above 18°C causes physiological stress for salmon.${currentTempInfo?.dateTime ? ` As of ${fmtDateTime(currentTempInfo.dateTime)}.` : ''} Source: USGS NWIS — live data.`
+              }
             />
           </div>
+        </div>
+
+        {/* Screen-reader announcement for chart updates */}
+        <div aria-live="polite" aria-atomic="true" className="sr-only">
+          {chartLoading ? 'Loading chart data…' : `Chart updated: ${chartTitle}`}
         </div>
 
         {/* Primary chart — salmon returns */}
@@ -237,7 +346,7 @@ export default function DashboardPage() {
             loading={chartLoading}
             variant="area"
             interpretation="This chart shows estimated annual salmon returns based on WDFW spawner surveys. Upward trends suggest improving habitat or ocean conditions. Downward trends may reflect climate impacts, habitat loss, or reduced hatchery output."
-            source="WDFW Salmonid Population Indicators (SPI) — Mock Data (Phase 1)"
+            source={`WDFW Salmonid Population Indicators (SPI) — data.wa.gov${salmonDataFetchedAt ? ` · Refreshed ${fmtDate(salmonDataFetchedAt)}` : ''}`}
           />
         </div>
 
@@ -258,7 +367,7 @@ export default function DashboardPage() {
                 height={220}
                 variant="line"
                 interpretation="Temperatures above 18°C are physiologically stressful for salmon. Rising late-summer temperatures are a primary climate impact on salmon survival."
-                source="USGS NWIS — Mock Data (real-time integration in M5)"
+                source="Synthetic historical data — USGS NWIS annual summaries planned"
               />
             </div>
 
@@ -274,7 +383,7 @@ export default function DashboardPage() {
                 height={220}
                 variant="line"
                 interpretation="Lower flows reduce the amount of habitat available to spawning and rearing salmon, and increase water temperatures. Drought years show sharp declines."
-                source="USGS NWIS — Mock Data (real-time integration in M5)"
+                source="Synthetic historical data — USGS NWIS annual summaries planned"
               />
             </div>
 
@@ -287,13 +396,22 @@ export default function DashboardPage() {
             Data Sources & Methods
           </summary>
           <div className="mt-4 space-y-2 text-gray-700 text-sm">
-            <p><strong>Salmon Returns:</strong> WDFW Salmonid Population Indicators (SPI) Database</p>
-            <p><strong>Water Temperature:</strong> USGS National Water Information System (NWIS)</p>
-            <p><strong>Streamflow:</strong> USGS NWIS Real-time Data</p>
-            <p><strong>Watershed Boundaries:</strong> USGS Watershed Boundary Dataset</p>
-            <p className="text-gray-500 mt-4">
-              <strong>Note:</strong> This dashboard currently displays mock data generated for demonstration purposes. Live data integration is planned for Phase 2 (M5 milestone).
+            <p>
+              <strong>Salmon Returns:</strong> WDFW Salmonid Population Indicators (SPI) — data.wa.gov
+              {salmonDataFetchedAt && <span className="text-gray-400"> · Refreshed {fmtDate(salmonDataFetchedAt)}</span>}
             </p>
+            <p>
+              <strong>Stream Temperature (current):</strong> USGS NWIS — live instantaneous values
+              {usgsTempLoading ? ', loading…' : usgsTempError ? ', unavailable' : (
+                <span className="text-gray-400">
+                  {` · ${usgsStations.length} stations`}
+                  {currentTempInfo?.dateTime && ` · As of ${fmtDateTime(currentTempInfo.dateTime)}`}
+                </span>
+              )}
+            </p>
+            <p><strong>Stream Temperature (trend chart):</strong> Synthetic historical series — will be replaced with USGS annual summaries in M5.5</p>
+            <p><strong>Streamflow:</strong> USGS NWIS — synthetic data (real integration in M5.5)</p>
+            <p><strong>Watershed Boundaries:</strong> USGS Watershed Boundary Dataset</p>
           </div>
         </details>
 

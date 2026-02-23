@@ -56,7 +56,9 @@ export function WatershedMap({ watersheds, selected, onChange }: WatershedMapPro
   // remounts the GeoJSON layer), so the closure always captures current state.
   const onEachFeature = useCallback(
     (feature: Feature, layer: Layer) => {
-      const ws = watersheds.find((w) => w.name === feature.properties?.name);
+      const ws = watersheds.find(
+        (w) => (w.geoJsonName ?? w.name) === feature.properties?.name,
+      );
       const isSelected = selected !== 'all' && ws?.slug === selected;
       const path = layer as Path;
 
@@ -89,8 +91,7 @@ export function WatershedMap({ watersheds, selected, onChange }: WatershedMapPro
 
   return (
     <div
-      className="relative w-full rounded-lg overflow-hidden border border-gray-200 shadow-sm mb-8"
-      style={{ height: '380px' }}
+      className="relative w-full rounded-lg overflow-hidden border border-gray-200 shadow-sm mb-8 h-[280px] sm:h-[380px]"
       aria-label="Interactive map of Puget Sound watersheds. Click a watershed to filter the dashboard."
     >
       {/* Loading / error states */}
@@ -120,7 +121,9 @@ export function WatershedMap({ watersheds, selected, onChange }: WatershedMapPro
             key={selected}
             data={geoJson}
             style={(feature) => {
-              const ws = watersheds.find((w) => w.name === feature?.properties?.name);
+              const ws = watersheds.find(
+                (w) => (w.geoJsonName ?? w.name) === feature?.properties?.name,
+              );
               const isSelected = selected !== 'all' && ws?.slug === selected;
               return featureStyle(ws, isSelected);
             }}
@@ -141,7 +144,7 @@ export function WatershedMap({ watersheds, selected, onChange }: WatershedMapPro
       {selected !== 'all' && (
         <button
           onClick={() => onChange('all')}
-          className="absolute top-4 right-4 bg-white rounded-lg shadow-md px-3 py-1.5 text-xs font-semibold text-primary hover:bg-gray-50 z-[1000] border border-gray-200 transition-colors"
+          className="absolute top-4 right-4 bg-white rounded-lg shadow-md px-3 py-1.5 text-xs font-semibold text-primary hover:bg-gray-50 z-[1000] border border-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
           aria-label="Show all watersheds"
         >
           Show all ×

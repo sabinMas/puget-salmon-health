@@ -76,7 +76,8 @@ export function ProjectList({ projects }: ProjectListProps) {
       <div className="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filter projects by type">
         <button
           onClick={() => setActiveFilter('all')}
-          className={`px-4 py-1.5 rounded-full text-sm border transition-colors ${
+          aria-pressed={activeFilter === 'all'}
+          className={`px-4 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 ${
             activeFilter === 'all'
               ? 'bg-primary text-white border-primary font-semibold'
               : 'border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -93,7 +94,8 @@ export function ProjectList({ projects }: ProjectListProps) {
             <button
               key={type}
               onClick={() => setActiveFilter(type)}
-              className={`px-4 py-1.5 rounded-full text-sm border transition-colors ${
+              aria-pressed={isActive}
+              className={`px-4 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 ${
                 isActive ? colors.filterActive : colors.filter
               }`}
             >
@@ -135,11 +137,13 @@ export function ProjectList({ projects }: ProjectListProps) {
                     ? 'bg-green-50 text-green-700'
                     : 'bg-gray-100 text-gray-600'
                 }`}>
-                  {project.status === 'active' ? '● Active' : '✓ Completed'}
+                  <span aria-hidden="true">{project.status === 'active' ? '● ' : '✓ '}</span>
+                  {project.status === 'active' ? 'Active' : 'Completed'}
                 </span>
                 <Link
                   href={`/stewardship/${project.slug}`}
-                  className="text-sm font-semibold text-primary hover:underline"
+                  className="text-sm font-semibold text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 rounded"
+                  aria-label={`Learn more about ${project.title}`}
                 >
                   Learn More →
                 </Link>

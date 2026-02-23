@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 
 const nav = [
   { label: "Dashboard",   href: "/dashboard"   },
-  { label: "Nations",     href: "/nations"     },
   { label: "Learn",       href: "/learn"       },
   { label: "Stewardship", href: "/stewardship" },
   { label: "About",       href: "/about"       },
@@ -59,7 +58,7 @@ export default function SiteHeader() {
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           onClick={() => setMenuOpen((o) => !o)}
-          className="flex sm:hidden flex-col justify-center gap-1.5 p-1"
+          className="flex sm:hidden flex-col items-center justify-center gap-1.5 p-2 min-h-[44px] min-w-[44px]"
         >
           <span
             className={`block h-0.5 w-6 bg-white transition-transform duration-200 ${

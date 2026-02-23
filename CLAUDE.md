@@ -117,6 +117,15 @@ Before stopping:
 - M1 milestone marked **COMPLETE** in TASKS.md
 - `npm run lint` ✅ `npm run build` ✅ all 15 routes
 
+### 2026-02-23 (session 12)
+- **M7.6 DEPLOYED** — Removed unused `next-mdx-remote@5.0.0` (CVE-2026-0969, was blocking Vercel); site is live
+- **M3.9/M3.10** — Built two new full learning modules: `why-salmon-matter` (keystone species, nutrient cycle, economic/cultural value, threats, hope; grades 7–12) and `reading-the-dashboard` (data sources, chart interpretation, status colors, env indicators, data caveats; all ages); educators page updated to list all 4 modules with standards + objectives
+- **M6.6** — Contact form system: `/api/contact` POST route using Resend SDK (lazy init so build-safe without env vars); `<ContactForm>` accessible client component; about page rewritten to embed form (replaces all fake `@pugetsalmonhealth.org` email addresses); educators CTA links to `/about#contact`
+- **README.md** — Full rewrite: current tech stack, accurate project structure, `data:refresh` instructions, env var table, removed all stale nations/mock-data content
+- **TASKS.md** — M7.6/M7.7 marked complete; M3.9/M3.10 added and completed; M6.6 added and completed; sprint priorities updated
+- `npm run build` ✅ 18 routes clean (up from 15)
+- **Action needed**: Add `RESEND_API_KEY` + `CONTACT_EMAIL` to Vercel environment variables to activate the contact form
+
 ### 2026-02-23 (session 11)
 - **PLANNING.md rewrite** — Removed all Nations/tribal-partnership framing; updated vision, sitemap, user journeys, data model, and component library to reflect the real site: data dashboard + stewardship projects. Projects may list real partner orgs as plain text.
 - **M6 (partial)** — Refactored `Project` type: `tribeIds: string[]` → `partnerOrgs: string[]`; added `yearStarted: number`; dropped `tribeId` filter from `getProjects()`; added `getProjectBySlug()` helper

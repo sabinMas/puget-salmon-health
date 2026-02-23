@@ -62,7 +62,9 @@ Stewardship projects page (`/stewardship`) covers restoration initiatives instea
 - [x] M3.5 — Assemble Learn index page (`/learn`)
 - [x] M3.6 — Module: "Salmon Life Cycle" (`/learn/salmon-life-cycle`)
 - [x] M3.7 — Module: "Treaty Rights & Co-Management" (`/learn/treaty-rights`)
-- [x] M3.8 — Educators page (`/learn/educators`)
+- [x] M3.8 — Educators page (`/learn/educators`) — updated to list all 4 modules
+- [x] M3.9 — Module: "Why Salmon Matter" (`/learn/why-salmon-matter`)
+- [x] M3.10 — Module: "Reading the Dashboard" (`/learn/reading-the-dashboard`)
 
 ---
 
@@ -105,6 +107,7 @@ Stewardship projects page (`/stewardship`) covers restoration initiatives instea
 - [x] M6.3 — Added 9 real, publicly documented Puget Sound stewardship projects
 - [x] M6.4 — Updated all stewardship pages + `ProjectList` to render `partnerOrgs` (no governance banner)
 - [ ] M6.5 — Write a short guide for adding new projects
+- [x] M6.6 — Contact form: `/api/contact` (Resend), `<ContactForm>` component, about page integration
 
 ---
 
@@ -131,8 +134,8 @@ Stewardship projects page (`/stewardship`) covers restoration initiatives instea
 - [x] **M7.5 — SEO setup** ✅
   - metadataBase, title template, OG/Twitter tags on all pages
   - dashboard/layout.tsx wrapper for 'use client' dashboard metadata
-- [ ] **M7.6 — Deployment**
-- [ ] **M7.7 — Documentation**
+- [x] **M7.6 — Deployment** ✅ — Live on Vercel (auto-deploy from main)
+- [x] **M7.7 — Documentation** ✅ — README fully rewritten; PLANNING.md updated
 
 ---
 
@@ -162,9 +165,9 @@ Stewardship projects page (`/stewardship`) covers restoration initiatives instea
 
 ### Next Priorities
 
-1. **M7.6 — Deployment** (Vercel or similar; `npm run build` is clean and ready)
-2. **M7.7 — Documentation** (README update, data refresh instructions)
-3. **M6** — Add real stewardship project content; decide on CMS approach
+1. **Contact form activation** — Add `RESEND_API_KEY` + `CONTACT_EMAIL` to Vercel environment variables (Settings → Environment Variables), then redeploy
+2. **M6.1** — Decide on CMS approach for stewardship projects (plain TS file is fine until a non-dev needs to edit)
+3. **M6.5** — Write a short guide for adding new stewardship projects
 
 ### Blockers
 

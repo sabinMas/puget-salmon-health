@@ -30,7 +30,7 @@ const SPECIES = [
   { id: '6', name: 'Steelhead', color: '#7c3aed' },
 ] as const;
 
-// Synthetic env data — replaced by USGS real data in M5
+// Synthetic env data — pending integration with USGS NWIS annual summaries
 const TEMP_DATA: ChartDataPoint[] = [
   { year: 2015, value: 11.8 }, { year: 2016, value: 12.3 },
   { year: 2017, value: 11.6 }, { year: 2018, value: 12.9 },

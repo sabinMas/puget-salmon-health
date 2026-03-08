@@ -117,6 +117,19 @@ Before stopping:
 - M1 milestone marked **COMPLETE** in TASKS.md
 - `npm run lint` ✅ `npm run build` ✅ all 15 routes
 
+### 2026-03-08 (session 14)
+- **Fake data audit + cleanup** — full codebase sweep for mock/placeholder/synthetic data:
+  - Deleted `lib/data/env-indicators.ts` — unused mock file with USGS_MOCK readings, never imported anywhere
+  - Rewrote `lib/data/watersheds.ts` — removed hardcoded mock health statuses; now derives `WatershedStatus` dynamically from real Chinook data in `salmon-returns.json` using a 3-year recent avg (2022–2024) vs 5-year baseline (2017–2021) ratio
+  - Added `description?: string` to `Project` interface in `types/index.ts`
+  - Added real 2–4 paragraph narratives to all 9 projects in `lib/data/projects.ts` — sourced from USFWS, WDFW, Puget Sound Partnership, WSDOT, and tribal program public documentation
+  - Removed "Full project story coming soon" placeholder from `app/stewardship/[project]/page.tsx`; now renders `project.description` split into paragraphs
+  - Cleaned up stale "in M5.5" milestone references in dashboard data source disclosures (both `/dashboard` and `/dashboard/[basin]`)
+  - Fixed `app/about/page.tsx`: streamflow row changed from "Real-time (15 min cache)" → "Synthetic historical series"; status note updated to clearly distinguish live vs synthetic data
+  - Fixed `app/learn/educators/page.tsx`: PDF resource format labels changed from "PDF — coming in M6" → "PDF — in development"
+  - Fixed `app/page.tsx` home page "The Data" pillar: removed stale "tribal monitoring programs" copy
+- `npm run build` ✅ 18 routes clean
+
 ### 2026-02-23 (session 13)
 - **PLANNING.md rewrite** — Removed all nations/tribal-partnership framing; updated vision, sitemap, user journeys, data model, and component library to match the real site (data dashboard + stewardship projects with plain-text partner attribution)
 - **M6 — Project type refactor**: `tribeIds: string[]` → `partnerOrgs: string[]`; added `yearStarted: number`; removed `tribeId` filter from `getProjects()`; added `getProjectBySlug()` helper

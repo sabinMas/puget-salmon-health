@@ -89,9 +89,9 @@ export default async function Home() {
             <div className="text-4xl mb-4" aria-hidden="true">📊</div>
             <h2 className="text-2xl font-bold mb-4 text-primary">The Data</h2>
             <p className="text-gray-700 mb-6 leading-relaxed">
-              Real-time and historical data on salmon populations, water quality, stream
-              temperatures, and habitat conditions across Puget Sound watersheds. Integrated from
-              WDFW, USGS, and tribal monitoring programs.
+              Real-time and historical data on salmon populations, stream temperatures, and
+              watershed health across Puget Sound. Integrated from WDFW Salmonid Population
+              Indicators and USGS National Water Information System.
             </p>
             <Link
               href="/dashboard"

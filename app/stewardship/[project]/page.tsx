@@ -104,13 +104,14 @@ export default async function ProjectPage({ params }: PageProps) {
         {/* Project overview */}
         <div className="bg-white border border-gray-200 rounded-lg p-8 mb-8">
           <h2 className="text-xl font-bold text-primary mb-4">Project Overview</h2>
-          <p className="text-gray-700 text-sm leading-relaxed mb-6">{project.excerpt}</p>
-          <div className="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-500">
-            <p className="text-sm font-medium mb-1">Full project story coming soon</p>
-            <p className="text-xs">
-              Detailed narrative, goals, timeline, and photos will be added as this site grows.
-            </p>
-          </div>
+          {project.description
+            ? project.description.split('\n\n').map((para, i) => (
+                <p key={i} className="text-gray-700 text-sm leading-relaxed mb-4 last:mb-0">
+                  {para}
+                </p>
+              ))
+            : <p className="text-gray-700 text-sm leading-relaxed">{project.excerpt}</p>
+          }
         </div>
 
         {/* Impact metrics */}

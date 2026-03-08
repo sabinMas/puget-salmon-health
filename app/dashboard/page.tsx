@@ -90,7 +90,7 @@ const SPECIES: Species[] = [
   { id: '6', commonName: 'Steelhead', slug: 'steelhead' },
 ];
 
-// Synthetic environmental time-series (replaced by USGS real data in M5)
+// Synthetic environmental time-series — pending USGS NWIS annual summary integration
 const TEMP_DATA: ChartDataPoint[] = [
   { year: 2015, value: 11.8 }, { year: 2016, value: 12.3 },
   { year: 2017, value: 11.6 }, { year: 2018, value: 12.9 },
@@ -409,8 +409,8 @@ export default function DashboardPage() {
                 </span>
               )}
             </p>
-            <p><strong>Stream Temperature (trend chart):</strong> Synthetic historical series — will be replaced with USGS annual summaries in M5.5</p>
-            <p><strong>Streamflow:</strong> USGS NWIS — synthetic data (real integration in M5.5)</p>
+            <p><strong>Stream Temperature (trend chart):</strong> Synthetic historical series — pending integration with USGS NWIS annual summary data</p>
+            <p><strong>Streamflow:</strong> Synthetic historical series — pending integration with USGS NWIS annual summary data</p>
             <p><strong>Watershed Boundaries:</strong> USGS Watershed Boundary Dataset</p>
           </div>
         </details>

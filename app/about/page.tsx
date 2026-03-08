@@ -86,8 +86,8 @@ export default function AboutPage() {
                 </tr>
                 <tr>
                   <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Streamflow</td>
-                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">USGS NWIS</td>
-                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Real-time (15 min cache)</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">USGS NWIS (integration pending)</td>
+                  <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Synthetic historical series</td>
                 </tr>
                 <tr>
                   <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-700">Fish Passage Barriers</td>
@@ -105,9 +105,11 @@ export default function AboutPage() {
 
           <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-gray-800">
-              <strong>Current Status:</strong> Salmon return data (WDFW SPI) and current stream
-              temperatures (USGS NWIS) are live. Historical temperature and streamflow trend charts
-              use synthetic data pending USGS annual summary integration.
+              <strong>Live data:</strong> Salmon return data (WDFW SPI) and current stream
+              temperatures (USGS NWIS) are sourced from real APIs. Watershed health status
+              indicators are derived from actual Chinook return trends in the WDFW dataset.
+              Historical temperature and streamflow trend charts currently use synthetic placeholder
+              series pending integration of USGS NWIS annual summary data.
             </p>
           </div>
 

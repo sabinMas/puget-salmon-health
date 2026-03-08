@@ -95,6 +95,8 @@ export interface Project {
   status: "active" | "completed";
   yearStarted: number;
   excerpt: string;
+  /** Full project narrative (HTML-safe plain text, 2–4 paragraphs). */
+  description?: string;
 }
 
 // ─── Population health helpers ────────────────────────────────────────────────

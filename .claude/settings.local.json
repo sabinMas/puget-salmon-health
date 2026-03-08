@@ -23,7 +23,8 @@
       "Bash(cd \"C:\\\\Users\\\\mason\\\\Documents\\\\GitHub\\\\puget-salmon-health\" && git add TASKS.md CLAUDE.md && git commit -m \"$\\(cat <<'EOF'\nUpdate TASKS.md and CLAUDE.md for session 12\n\n- M7.6 deployment and M7.7 documentation marked complete\n- M3.9/M3.10 \\(new learn modules\\) and M6.6 \\(contact form\\) logged\n- Sprint priorities updated: next action is contact form activation\n- Session 12 log added to CLAUDE.md\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\" && git push 2>&1)",
       "Bash(cd \"C:\\\\Users\\\\mason\\\\Documents\\\\GitHub\\\\puget-salmon-health\" && gh api repos/sabinMas/puget-salmon-health/deployments --jq '.[0]' 2>&1)",
       "Bash(cd \"C:\\\\Users\\\\mason\\\\Documents\\\\GitHub\\\\puget-salmon-health\" && git add TASKS.md && git commit -m \"$\\(cat <<'EOF'\nClose M6: no external partners or CMS needed\n\nProject content managed directly in lib/data/projects.ts.\nContact form \\(M6.6\\) retained for public inquiries.\nM7 marked complete. Updated sprint priorities.\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\" && git push 2>&1)",
-      "Bash(cd \"C:\\\\Users\\\\mason\\\\Documents\\\\GitHub\\\\puget-salmon-health\" && git add CLAUDE.md TASKS.md && git commit -m \"$\\(cat <<'EOF'\nLog session 13 — all milestones complete, contact form live\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\" && git push 2>&1)"
+      "Bash(cd \"C:\\\\Users\\\\mason\\\\Documents\\\\GitHub\\\\puget-salmon-health\" && git add CLAUDE.md TASKS.md && git commit -m \"$\\(cat <<'EOF'\nLog session 13 — all milestones complete, contact form live\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\" && git push 2>&1)",
+      "Bash(npm run:*)"
     ]
   }
 }

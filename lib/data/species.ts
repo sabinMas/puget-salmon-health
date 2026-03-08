@@ -6,7 +6,7 @@ export interface Species {
   icon: string;
 }
 
-const mockSpecies: Species[] = [
+const SPECIES: Species[] = [
   { id: '1', commonName: 'Chinook', scientificName: 'Oncorhynchus tshawytscha', slug: 'chinook', icon: '🐟' },
   { id: '2', commonName: 'Coho', scientificName: 'Oncorhynchus kisutch', slug: 'coho', icon: '🐟' },
   { id: '3', commonName: 'Chum', scientificName: 'Oncorhynchus keta', slug: 'chum', icon: '🐟' },
@@ -16,13 +16,13 @@ const mockSpecies: Species[] = [
 ];
 
 export async function getSpecies(): Promise<Species[]> {
-  return mockSpecies;
+  return SPECIES;
 }
 
 export async function getSpeciesById(id: string): Promise<Species | undefined> {
-  return mockSpecies.find((s) => s.id === id);
+  return SPECIES.find((s) => s.id === id);
 }
 
 export async function getSpeciesBySlug(slug: string): Promise<Species | undefined> {
-  return mockSpecies.find((s) => s.slug === slug);
+  return SPECIES.find((s) => s.slug === slug);
 }

@@ -108,19 +108,19 @@ const RESOURCES = [
   {
     title: 'Salmon Life Cycle — Educator Guide',
     description: 'Discussion questions, activity templates, and vocabulary list for the Salmon Life Cycle module.',
-    format: 'PDF — coming in M6',
+    format: 'PDF — in development',
     available: false,
   },
   {
     title: 'Treaty Rights — Educator Guide',
     description: 'Primary source excerpts, stakeholder role cards for the simulation activity, and timeline template.',
-    format: 'PDF — coming in M6',
+    format: 'PDF — in development',
     available: false,
   },
   {
     title: 'Dashboard Data Activity Worksheet',
     description: 'Structured worksheet guiding students through reading the dashboard, interpreting trends, and forming evidence-based claims.',
-    format: 'PDF — coming in M6',
+    format: 'PDF — in development',
     available: false,
   },
 ];

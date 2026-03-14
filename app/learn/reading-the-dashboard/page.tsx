@@ -174,12 +174,12 @@ export default function ReadingTheDashboardPage() {
                 </div>
               ))}
             </div>
-            <div className="mt-4 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
+            <div className="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
               <p className="text-sm text-gray-800">
-                <strong>Important caveat:</strong> Environmental indicator charts on the dashboard
-                currently use synthetic historical data for trend visualization — real USGS annual
-                summaries are planned for a future update. Current temperature readings (shown as
-                metric cards) are live from USGS gauges.
+                <strong>Data sources:</strong> Environmental indicator trend charts (annual temperature
+                and stream discharge) use real data from the USGS NWIS Statistics Service — annual
+                median values across active Puget Sound monitoring stations. Current temperature
+                readings (shown as metric cards) are live real-time readings from the same USGS gauge network.
               </p>
             </div>
           </section>

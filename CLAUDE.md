@@ -117,6 +117,19 @@ Before stopping:
 - M1 milestone marked **COMPLETE** in TASKS.md
 - `npm run lint` ✅ `npm run build` ✅ all 15 routes
 
+### 2026-03-14 (session 15)
+- **Eliminated last synthetic data** — replaced hardcoded `TEMP_DATA` and `FLOW_DATA` constants with real USGS API calls
+  - Created `lib/data/usgs-history.ts`: two-step fetch — USGS DV service for annual temperature, USGS Stats service for annual streamflow; aggregated via per-year median across confirmed Puget Sound stations
+  - Temperature: 5 DV stations (White River/Auburn, N.Fork Tolt, Canyon Creek, Taylor Creek, Skykomish) — confirmed full 2015–2024 data; daily values endpoint supports bBox
+  - Streamflow: 5 stations via annual stats endpoint (Skokomish, Goldsborough, Green/Cedar, Cedar/Renton, Snohomish) — confirmed full 2015–2024; stats endpoint requires specific site IDs, does NOT support bBox or stateCd
+  - Created `app/api/usgs-history/route.ts` — exposes data to client components; 24-hour ISR cache; pre-renders `○ Static` at build time
+  - Updated `app/dashboard/page.tsx` — added `envData`/`envLoading` state, useEffect to fetch `/api/usgs-history`; charts now show real data with loading skeleton
+  - Updated `app/dashboard/[basin]/page.tsx` — server component now calls `fetchUsgsHistory()` directly with try-catch fallback
+  - Updated `app/about/page.tsx` — data sources table and blue info box now state all data is real
+  - Updated `app/learn/reading-the-dashboard/page.tsx` — caveat changed from "synthetic" warning to factual source description
+- Zero synthetic data remains in the codebase
+- `npm run build` ✅ 19 routes clean, `/api/usgs-history` pre-renders Static with 1-day revalidation
+
 ### 2026-03-08 (session 14)
 - **Fake data audit + cleanup** — full codebase sweep for mock/placeholder/synthetic data:
   - Deleted `lib/data/env-indicators.ts` — unused mock file with USGS_MOCK readings, never imported anywhere

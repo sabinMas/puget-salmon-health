@@ -11,6 +11,7 @@ import { IndicatorChart }   from '@/components/dashboard/IndicatorChart';
 import type { ChartDataPoint } from '@/components/dashboard/IndicatorChart';
 import { getWatershedBySlug }                     from '@/lib/data/watersheds';
 import { getSalmonReturns, salmonDataFetchedAt }  from '@/lib/data/salmon-returns';
+import { fetchUsgsHistory }                       from '@/lib/data/usgs-history';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -29,23 +30,6 @@ const SPECIES = [
   { id: '5', name: 'Sockeye',   color: '#ea580c' },
   { id: '6', name: 'Steelhead', color: '#7c3aed' },
 ] as const;
-
-// Synthetic env data — pending integration with USGS NWIS annual summaries
-const TEMP_DATA: ChartDataPoint[] = [
-  { year: 2015, value: 11.8 }, { year: 2016, value: 12.3 },
-  { year: 2017, value: 11.6 }, { year: 2018, value: 12.9 },
-  { year: 2019, value: 13.4 }, { year: 2020, value: 12.7 },
-  { year: 2021, value: 13.8 }, { year: 2022, value: 14.2 },
-  { year: 2023, value: 13.9 }, { year: 2024, value: 14.5 },
-];
-
-const FLOW_DATA: ChartDataPoint[] = [
-  { year: 2015, value: 8.4 }, { year: 2016, value: 9.1 },
-  { year: 2017, value: 10.3 }, { year: 2018, value: 7.8 },
-  { year: 2019, value: 8.9 }, { year: 2020, value: 9.6 },
-  { year: 2021, value: 6.9 }, { year: 2022, value: 7.4 },
-  { year: 2023, value: 8.3 }, { year: 2024, value: 7.9 },
-];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -96,6 +80,16 @@ export default async function BasinPage({ params }: PageProps) {
 
   // Fetch all returns for this watershed, then split by species
   const allReturns = await getSalmonReturns(watershed.id);
+
+  // Fetch real USGS annual env data — falls back to empty arrays on error
+  let envData: { tempTrend: ChartDataPoint[]; flowTrend: ChartDataPoint[]; tempStationCount: number; flowStationCount: number } = {
+    tempTrend: [], flowTrend: [], tempStationCount: 0, flowStationCount: 0,
+  };
+  try {
+    envData = await fetchUsgsHistory();
+  } catch {
+    // Leave envData as empty arrays — IndicatorChart renders "No data" state
+  }
 
   // Main chart: Chinook only
   const chinookReturns = allReturns.filter((r) => r.speciesId === '1');
@@ -218,30 +212,30 @@ export default async function BasinPage({ params }: PageProps) {
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-4 text-gray-800">
-                Late-Summer Stream Temperature
+                Annual Water Temperature
               </h3>
               <IndicatorChart
-                data={TEMP_DATA}
-                title="Late-Summer Stream Temperature"
+                data={envData.tempTrend}
+                title="Annual Water Temperature"
                 unit="°C"
                 color="#ea580c"
                 height={200}
                 variant="line"
-                interpretation="Temperatures above 18°C cause physiological stress for adult salmon. A warming trend is visible over the monitoring period."
-                source="Synthetic historical data — USGS NWIS annual summaries planned"
+                interpretation="Annual median water temperature across active USGS monitoring stations in Puget Sound. Temperatures above 18°C cause physiological stress for adult salmon."
+                source={`USGS NWIS Statistics Service — annual median across ${envData.tempStationCount} stations`}
               />
             </div>
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">Annual Streamflow</h3>
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">Annual Stream Discharge</h3>
               <IndicatorChart
-                data={FLOW_DATA}
-                title="Annual Streamflow"
-                unit="kcfs"
+                data={envData.flowTrend}
+                title="Annual Stream Discharge"
+                unit="cfs"
                 color="#0ea5e9"
                 height={200}
                 variant="line"
-                interpretation="Low flow years reduce spawning habitat availability and concentrate contaminants, increasing mortality risk for all life stages."
-                source="Synthetic historical data — USGS NWIS annual summaries planned"
+                interpretation="Annual median stream discharge across active USGS gauging stations in Puget Sound. Low flow years reduce spawning habitat and concentrate contaminants."
+                source={`USGS NWIS Statistics Service — annual median across ${envData.flowStationCount} stations`}
               />
             </div>
           </div>

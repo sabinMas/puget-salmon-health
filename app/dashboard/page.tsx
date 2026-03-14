@@ -90,22 +90,14 @@ const SPECIES: Species[] = [
   { id: '6', commonName: 'Steelhead', slug: 'steelhead' },
 ];
 
-// Synthetic environmental time-series — pending USGS NWIS annual summary integration
-const TEMP_DATA: ChartDataPoint[] = [
-  { year: 2015, value: 11.8 }, { year: 2016, value: 12.3 },
-  { year: 2017, value: 11.6 }, { year: 2018, value: 12.9 },
-  { year: 2019, value: 13.4 }, { year: 2020, value: 12.7 },
-  { year: 2021, value: 13.8 }, { year: 2022, value: 14.2 },
-  { year: 2023, value: 13.9 }, { year: 2024, value: 14.5 },
-];
+// ── USGS history API response type ───────────────────────────────────────────
 
-const FLOW_DATA: ChartDataPoint[] = [
-  { year: 2015, value: 8.4 }, { year: 2016, value: 9.1 },
-  { year: 2017, value: 10.3 }, { year: 2018, value: 7.8 },
-  { year: 2019, value: 8.9 }, { year: 2020, value: 9.6 },
-  { year: 2021, value: 6.9 }, { year: 2022, value: 7.4 },
-  { year: 2023, value: 8.3 }, { year: 2024, value: 7.9 },
-];
+interface UsgsHistoryData {
+  tempTrend: ChartDataPoint[];
+  flowTrend: ChartDataPoint[];
+  tempStationCount: number;
+  flowStationCount: number;
+}
 
 // ── Aggregation helper ────────────────────────────────────────────────────────
 
@@ -136,6 +128,10 @@ export default function DashboardPage() {
   const [usgsTempLoading, setUsgsTempLoading] = useState(true);
   const [usgsTempError,   setUsgsTempError]   = useState(false);
 
+  // USGS historical env indicator state (annual temp + flow trends)
+  const [envData,    setEnvData]    = useState<UsgsHistoryData | null>(null);
+  const [envLoading, setEnvLoading] = useState(true);
+
   // Load watershed list once
   useEffect(() => {
     getWatersheds().then((data) => {
@@ -144,7 +140,7 @@ export default function DashboardPage() {
     });
   }, []);
 
-  // Fetch USGS temperature stations once on mount
+  // Fetch USGS live temperature stations once on mount
   useEffect(() => {
     fetch('/api/usgs')
       .then((r) => r.json())
@@ -157,6 +153,18 @@ export default function DashboardPage() {
       })
       .catch(() => setUsgsTempError(true))
       .finally(() => setUsgsTempLoading(false));
+  }, []);
+
+  // Fetch USGS annual historical env data once on mount
+  useEffect(() => {
+    fetch('/api/usgs-history')
+      .then((r) => r.json())
+      .then((data: unknown) => {
+        const d = data as UsgsHistoryData;
+        if (d?.tempTrend && d?.flowTrend) setEnvData(d);
+      })
+      .catch(() => { /* envData stays null — charts show empty state */ })
+      .finally(() => setEnvLoading(false));
   }, []);
 
   // Re-fetch + aggregate salmon return data whenever filters change
@@ -357,33 +365,35 @@ export default function DashboardPage() {
 
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-4 text-gray-800">
-                Late-Summer Stream Temperature
+                Annual Water Temperature
               </h3>
               <IndicatorChart
-                data={TEMP_DATA}
-                title="Late-Summer Stream Temperature"
+                data={envData?.tempTrend ?? []}
+                title="Annual Water Temperature"
                 unit="°C"
                 color="#ea580c"
                 height={220}
                 variant="line"
-                interpretation="Temperatures above 18°C are physiologically stressful for salmon. Rising late-summer temperatures are a primary climate impact on salmon survival."
-                source="Synthetic historical data — USGS NWIS annual summaries planned"
+                loading={envLoading}
+                interpretation="Annual median water temperature across active USGS monitoring stations in Puget Sound. Temperatures above 18°C are physiologically stressful for salmon."
+                source={`USGS NWIS Statistics Service — annual median across ${envData?.tempStationCount ?? '…'} stations`}
               />
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h3 className="text-lg font-semibold mb-4 text-gray-800">
-                Annual Streamflow
+                Annual Stream Discharge
               </h3>
               <IndicatorChart
-                data={FLOW_DATA}
-                title="Annual Streamflow"
-                unit="kcfs"
+                data={envData?.flowTrend ?? []}
+                title="Annual Stream Discharge"
+                unit="cfs"
                 color="#0ea5e9"
                 height={220}
                 variant="line"
-                interpretation="Lower flows reduce the amount of habitat available to spawning and rearing salmon, and increase water temperatures. Drought years show sharp declines."
-                source="Synthetic historical data — USGS NWIS annual summaries planned"
+                loading={envLoading}
+                interpretation="Annual median stream discharge across active USGS gauging stations in Puget Sound. Lower flows reduce spawning habitat and concentrate contaminants."
+                source={`USGS NWIS Statistics Service — annual median across ${envData?.flowStationCount ?? '…'} stations`}
               />
             </div>
 
@@ -409,8 +419,12 @@ export default function DashboardPage() {
                 </span>
               )}
             </p>
-            <p><strong>Stream Temperature (trend chart):</strong> Synthetic historical series — pending integration with USGS NWIS annual summary data</p>
-            <p><strong>Streamflow:</strong> Synthetic historical series — pending integration with USGS NWIS annual summary data</p>
+            <p>
+              <strong>Stream Temperature (trend chart):</strong> USGS NWIS Statistics Service — annual median across {envLoading ? '…' : (envData?.tempStationCount ?? 0)} stations
+            </p>
+            <p>
+              <strong>Stream Discharge (trend chart):</strong> USGS NWIS Statistics Service — annual median across {envLoading ? '…' : (envData?.flowStationCount ?? 0)} stations
+            </p>
             <p><strong>Watershed Boundaries:</strong> USGS Watershed Boundary Dataset</p>
           </div>
         </details>
